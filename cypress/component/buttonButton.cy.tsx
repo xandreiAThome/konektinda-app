@@ -1,9 +1,10 @@
-import React from 'react'
-import { Button } from '../../components/ui/button'
+import React from 'react';
+import { mount } from 'cypress/react';
+import { Button } from '@/components/ui/button';
 
-describe('<Button />', () => {
+describe('Button', () => {
   it('renders', () => {
     // see: https://on.cypress.io/mounting-react
-    cy.mount(<Button />)
-  })
-})
+    mount(<Button />);
+  });
+});

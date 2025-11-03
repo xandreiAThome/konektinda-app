@@ -9,4 +9,19 @@ export default defineConfig({
       '@': path.resolve(__dirname, './'),
     },
   },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+        '.mjs': 'jsx',
+      },
+      define: {
+        global: 'globalThis',
+      },
+      supported: {
+        bigint: false,
+      },
+    },
+    exclude: ['react-native'],
+  },
 });
