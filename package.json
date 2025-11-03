@@ -7,12 +7,15 @@
     "android": "expo start -c --android",
     "ios": "expo start -c --ios",
     "web": "expo start -c --web",
-    "clean": "rm -rf .expo node_modules"
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@react-navigation/native": "^7.0.0",
     "@rn-primitives/portal": "~1.3.0",
     "@rn-primitives/slot": "^1.2.0",
+    "@tanstack/react-query": "^5.90.6",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "expo": "^54.0.0",
@@ -38,10 +41,18 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
+    "@cypress/react": "^9.0.1",
+    "@cypress/webpack-dev-server": "^5.1.3",
+    "@types/css": "^0.0.38",
+    "@types/css-modules": "^1.0.5",
     "@types/react": "~19.1.10",
+    "@vitejs/plugin-react": "^5.1.0",
+    "cypress": "^15.5.0",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vite": "^7.1.12",
+    "webpack": "^5.102.1"
   },
   "private": true
 }

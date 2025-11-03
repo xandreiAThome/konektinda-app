@@ -33,7 +33,7 @@ export default function Screen() {
         <Image source={LOGO[colorScheme ?? 'light']} style={IMAGE_STYLE} resizeMode="contain" />
         <View className="gap-2 p-4">
           <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
-            1. Edit <Text variant="code">app/index.tsx</Text> to get started.
+            1. Edit <Text variant="code">app/(tabs)/index.tsx</Text> to get started.
           </Text>
           <Text className="ios:text-foreground font-mono text-sm text-muted-foreground">
             2. Save to see your changes instantly.
