@@ -30,7 +30,7 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
     <View style={{ backgroundColor: bgColor }} className="flex-1 items-center">
       <View className="w-full flex-1 items-center justify-center gap-8 px-4 pb-5 pt-8">
         {/* Logo */}
-        <Image source={require('@/assets/images/logo.webp')} className="h-28 w-28" />
+        <Image source={require('@/assets/images/KonekTinda_Logo.png')} className="h-32 w-64" />
 
         {/* 1. Login Form Area */}
         <View className="w-full max-w-sm items-center">

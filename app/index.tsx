@@ -22,7 +22,7 @@ export default function LoginPage() {
     setLoginMode(isCustomerMode ? 'supplier' : 'customer');
   };
 
-  // --- Other Navigation Handlers (remain the same) ---
+  // --- Other Navigation Handlers ---
   const handleCreateAccount = () => {
     const nextRole = isCustomerMode ? 'customer' : 'supplier';
     router.push({
@@ -30,28 +30,17 @@ export default function LoginPage() {
       params: { role: nextRole },
     });
   };
-  const handleLoginAsSupplier = () => {
-    // This button is removed and replaced by the single switch, but we keep the logic structure
-    console.log('Using central switch.');
-  };
+
   const handleForgotPassword = () => {
     Alert.alert('Navigate', 'Forgot Password logic');
-  };
-
-  // --- Assembling the Props for the Template ---
-  const loginProps = {
-    onLogin: handleLogin,
-    onCreateAccount: handleCreateAccount,
-    onLoginAsSupplier: handleLoginAsSupplier, // Still passed, but the O_LoginArea will ignore the UI element
-    onForgotPassword: handleForgotPassword,
   };
 
   return (
     <LoginTemplate
       theme={loginMode}
-      loginProps={loginProps} // Contains onLogin, onForgotPassword
+      onLogin={handleLogin}
+      onForgotPassword={handleForgotPassword}
       onSwitchMode={handleSwitchMode}
-      // 🔑 FIX: Add the required prop here!
       onCreateAccount={handleCreateAccount}
     />
   );

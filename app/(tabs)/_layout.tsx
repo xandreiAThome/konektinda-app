@@ -1,23 +1,60 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-// import { AntDesign } from '@expo/vector-icons'; // Import icons if needed
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true, // Show a header for the screen title
-        tabBarActiveTintColor: '#E76F51', // Use your primary red color
-      }}
-    >
+        headerShown: true,
+        tabBarActiveTintColor: '#ef4444',
+        tabBarInactiveTintColor: '#9ca3af',
+        tabBarStyle: {
+          backgroundColor: '#ffffff',
+          borderTopColor: '#e5e7eb',
+          borderTopWidth: 1,
+          height: 64,
+          paddingBottom: 4,
+          paddingTop: 4,
+        },
+        headerStyle: {
+          backgroundColor: '#2C666E',
+          borderBottomColor: '#0d9488',
+          borderBottomWidth: 0,
+        },
+        headerLeft: () => (
+          <Image
+            source={require('@/assets/images/KonekTinda_Logo.png')}
+            style={{ width: 64, height: 40, marginLeft: 16 }}
+          />
+        ),
+        headerRight: () => (
+          <Image
+            source={require('@/assets/images/avatar_user.png')}
+            style={{ width: 36, height: 36, marginRight: 16 }}
+          />
+        ),
+        headerTitle: '',
+      }}>
       <Tabs.Screen
-        name="index" // Corresponds to app/(tabs)/index.tsx
+        name="index"
         options={{
           title: 'Home',
-          // tabBarIcon: ({ color }) => <AntDesign name="home" color={color} size={24} />,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
         }}
       />
-      {/* You would add other tabs here, e.g., for orders, profile, etc. */}
+      <Tabs.Screen
+        name="product_page"
+        options={{
+          title: 'Products',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="shopping" color={color} size={size} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
