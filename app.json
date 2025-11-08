@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/konektinda-logo-teal.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

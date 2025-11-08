@@ -8,7 +8,7 @@ import { O_FormArea } from '../organisms/FormArea';
 import { M_FormField } from '../molecules/FormField';
 import { router } from 'expo-router';
 
-const KonekTindaLogo = require('../../../../assets/images/splash.png'); // Adjust path
+const KonekTindaLogo = require('../../../../assets/images/konektinda-logo-teal.png'); // Adjust path
 
 
 // Define the state structure (essential for the keyof operator)
@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   logo: {
-    width: 250,
-    height: 100,
-    marginBottom: 40,
+    width: 500,
+    height: 150,
+    marginBottom: 20,
   },
   formArea: {
     marginTop: 20, 

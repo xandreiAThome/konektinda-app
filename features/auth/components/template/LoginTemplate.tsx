@@ -8,7 +8,7 @@ import { O_FormArea } from '../organisms/FormArea';
 import { O_LoginArea } from '../organisms/LoginArea';
 
 // Adjust path to the logo asset relative to this file
-const KonekTindaLogo = require('../../../../assets/images/splash.png');
+const KonekTindaLogo = require('../../../../assets/images/konektinda-logo-teal.png');
 
 // --- Props Interface ---
 // Props passed down to the O_LoginArea organism
@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   logo: {
-    width: 250,
-    height: 100,
-    marginBottom: 60,
+    width: 500,
+    height: 150,
+    marginBottom: 20,
   },
   formArea: {
     marginBottom: 5, // Reduce space between form and links
