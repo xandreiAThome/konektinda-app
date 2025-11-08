@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, ScrollView, Pressable } from 'react-native';
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { O_ProductHeaderBar } from '../organisms/ProductHeaderBar';
 import { O_ProductInfo } from '../organisms/ProductInfo';
 import { A_SellerInfo } from '../atoms/SellerInfo';
 import { M_AddToCartButton } from '../atoms/AddToCartButton';
 import { O_ReviewsSection } from '../organisms/ReviewsSection';
 import { Text } from '@/components/ui/text';
-import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 
@@ -17,6 +17,14 @@ interface Review {
   rating: number;
   reviewDate: string;
   reviewerImage: any;
+}
+
+interface ProductTemplateProps {
+  brandName: string;
+  productName: string;
+  price: number;
+  size: string;
+  description: string;
 }
 
 // Temporary mock data
@@ -38,11 +46,17 @@ const TEMP_REVIEWS: Review[] = [
   },
 ];
 
-export const ProductTemplate: React.FC = () => {
-  const navigation = useNavigation();
+export const ProductTemplate: React.FC<ProductTemplateProps> = ({
+  brandName,
+  productName,
+  price,
+  size,
+  description,
+}) => {
+  const router = useRouter();
 
   const handleBackPress = () => {
-    navigation.goBack();
+    router.push('/(tabs)/listing');
   };
 
   const handleAddToCart = () => {
@@ -67,11 +81,11 @@ export const ProductTemplate: React.FC = () => {
 
         {/* Product Information */}
         <O_ProductInfo
-          brandName="BRAND NAME"
-          productName="Product Name"
-          size="000mL"
-          price={100.0}
-          description="This is a product description that highlights the perfect mix of quality, design, and everyday functionality. This is a product description that highlights the perfect mix of quality, design, and everyday functionality."
+          brandName={brandName}
+          productName={productName}
+          size={size}
+          price={price}
+          description={description}
         />
 
         {/* Seller Info */}
