@@ -47,12 +47,18 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="listing"
+        options={{
+          title: 'Browse',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="view-list" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="product_page"
         options={{
-          title: 'Products',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="shopping" color={color} size={size} />
-          ),
+          href: null,
         }}
       />
     </Tabs>

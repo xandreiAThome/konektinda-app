@@ -11,12 +11,9 @@ interface ProductGridProps {
 export const ProductGrid: React.FC<ProductGridProps> = ({ title, products }) => {
   return (
     <View className="mt-6">
-      
       {/* Title */}
-      <Text className="text-xl font-afacad-bold text-[#EB5555] mb-4">
-        {title}
-      </Text>
-      
+      <Text className="font-afacad-bold mb-4 text-xl text-[#EB5555]">{title}</Text>
+
       {/* 2. Grid */}
       {/* FIX: Added 'flex-row flex-wrap justify-between' back
         This creates the 2-column layout.
@@ -25,6 +22,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ title, products }) => 
         {products.map((product) => (
           <ProductCard
             key={product.id}
+            id={product.id}
             brand={product.brand}
             name={product.name}
             price={product.price}
