@@ -1,34 +1,23 @@
+import React from 'react';
 import { Tabs } from 'expo-router';
-import { HomeIcon, PlusCircleIcon, NetworkIcon } from 'lucide-react-native';
+// import { AntDesign } from '@expo/vector-icons'; // Import icons if needed
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: 'blue',
-        headerShown: true,
-      }}>
+        headerShown: true, // Show a header for the screen title
+        tabBarActiveTintColor: '#E76F51', // Use your primary red color
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="index" // Corresponds to app/(tabs)/index.tsx
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => <HomeIcon size={size} color={color} />,
+          // tabBarIcon: ({ color }) => <AntDesign name="home" color={color} size={24} />,
         }}
       />
-      <Tabs.Screen
-        name="counter"
-        options={{
-          title: 'Counter',
-          tabBarIcon: ({ color, size }) => <PlusCircleIcon size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="example"
-        options={{
-          title: 'Example Feature',
-          tabBarIcon: ({ color, size }) => <NetworkIcon size={size} color={color} />,
-        }}
-      />
+      {/* You would add other tabs here, e.g., for orders, profile, etc. */}
     </Tabs>
   );
 }
