@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
 import { router } from 'expo-router';
-// Import the new Template
-import { LoginTemplate } from '../features/auth/components/template/LoginTemplate'; 
+import { LoginTemplate } from '../features/auth/components/template/LoginTemplate';
 
 export default function LoginPage() {
   // 🔑 KEY CHANGE: State to switch between modes
@@ -13,19 +12,16 @@ export default function LoginPage() {
   // --- Login Handler ---
   const handleLogin = (username: string, password: string) => {
     const role = isCustomerMode ? 'Customer' : 'Supplier';
-    Alert.alert(
-      `${role} Login Attempt`,
-      `Logging in as ${role} with: ${username}`
-    );
+    Alert.alert(`${role} Login Attempt`, `Logging in as ${role} with: ${username}`);
     // On success, navigate to the respective home screen or a shared home
-    router.replace('/(tabs)'); 
+    router.replace('/(tabs)');
   };
-  
+
   // --- Mode Switch Handler ---
   const handleSwitchMode = () => {
     setLoginMode(isCustomerMode ? 'supplier' : 'customer');
   };
-  
+
   // --- Other Navigation Handlers (remain the same) ---
   const handleCreateAccount = () => {
     const nextRole = isCustomerMode ? 'customer' : 'supplier';
@@ -54,7 +50,7 @@ export default function LoginPage() {
     <LoginTemplate
       theme={loginMode}
       loginProps={loginProps} // Contains onLogin, onForgotPassword
-      onSwitchMode={handleSwitchMode} 
+      onSwitchMode={handleSwitchMode}
       // 🔑 FIX: Add the required prop here!
       onCreateAccount={handleCreateAccount}
     />

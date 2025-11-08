@@ -1,122 +1,54 @@
 import React from 'react';
-import { View, StyleSheet, ViewProps, TextStyle, ViewStyle } from 'react-native';
-// ⚠️ Adjust path to AppColors based on where you placed the config file
-import { AppColors } from '../../../../config/colors';
-import { A_Image } from '../atoms/Image';
-import { A_Button } from '../atoms/Button';
-import { O_FormArea } from '../organisms/FormArea';
+import { View, ViewProps } from 'react-native';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/text';
 import { O_LoginArea } from '../organisms/LoginArea';
-
-// Adjust path to the logo asset relative to this file
-const KonekTindaLogo = require('../../../../assets/images/splash.png');
-
-// --- Props Interface ---
-// Props passed down to the O_LoginArea organism
-type LoginAreaProps = React.ComponentProps<typeof O_LoginArea>;
+import { Image } from 'expo-image';
 
 interface LoginTemplateProps extends ViewProps {
-  theme: 'supplier' | 'customer'; // The mode state managed in app/index.tsx
-  loginProps: LoginAreaProps; // All handler functions (onLogin, onForgotPassword)
-  onSwitchMode: () => void; // Handler to change the theme state
-  onCreateAccount: () => void; // Handler to navigate to the signup page
+  theme: 'supplier' | 'customer';
+  onLogin: (username: string, password: string) => void;
+  onForgotPassword: () => void;
+  onSwitchMode: () => void;
+  onCreateAccount: () => void;
 }
 
 export const LoginTemplate: React.FC<LoginTemplateProps> = ({
   theme,
-  loginProps,
+  onLogin,
+  onForgotPassword,
   onSwitchMode,
   onCreateAccount,
 }) => {
   const isCustomer = theme === 'customer';
-
-  // 🔑 Theme-Dependent Styles and Text
-  const themeStyles: {
-    background: string;
-    buttonColor: string;
-    linkText: string;
-    switchText: string;
-    switchTextColor: string;
-  } = {
-    // Background and primary button color swap
-    background: isCustomer ? AppColors.CustomerBackground : AppColors.SupplierBackground,
-    buttonColor: isCustomer ? AppColors.CustomerButton : AppColors.SupplierButton,
-
-    // Link styles (Forgot Password, Create Account)
-    linkText: isCustomer ? AppColors.CustomerLink : AppColors.SupplierLink,
-
-    // Switch button text and color
-    switchText: isCustomer ? 'LOGIN AS SUPPLIER' : 'LOGIN AS CUSTOMER',
-    switchTextColor: isCustomer ? AppColors.White : AppColors.Black,
-  };
-
-  // Override the Forgot Password link style to use the theme's link color
-  const forgotPasswordLinkStyle: TextStyle = { color: themeStyles.linkText };
+  const bgColor = isCustomer ? '#0d9488' : '#ef4444';
+  const buttonColor = isCustomer ? '#ef4444' : '#0d9488';
+  const linkColor = isCustomer ? '#fed7aa' : '#f3f4f6';
+  const switchTextColor = '#ffffff';
 
   return (
-    <View style={[styles.fullScreenContainer, { backgroundColor: themeStyles.background }]}>
-      <View style={styles.contentWrapper}>
+    <View style={{ backgroundColor: bgColor }} className="flex-1 items-center">
+      <View className="w-full flex-1 items-center justify-center gap-8 px-4 pb-5 pt-8">
         {/* Logo */}
-        <A_Image source={KonekTindaLogo} style={styles.logo} />
+        <Image source={require('@/assets/images/logo.webp')} className="h-28 w-28" />
 
         {/* 1. Login Form Area */}
-        <O_FormArea style={styles.formArea}>
-          <O_LoginArea
-            {...loginProps}
-            // Overriding styles passed down to atoms inside the organism
-            primaryButtonStyle={{ backgroundColor: themeStyles.buttonColor }}
-            primaryButtonTextStyle={{ color: AppColors.White }}
-            forgotPasswordLinkStyle={forgotPasswordLinkStyle}
-          />
-        </O_FormArea>
+        <View className="w-full max-w-sm items-center">
+          <O_LoginArea onLogin={onLogin} onForgotPassword={onForgotPassword} />
+        </View>
 
-        {/* 2. Create Account Link (Always visible, style matches theme) */}
-        <A_Button
-          title="Create Account"
-          variant="link"
-          onPress={onCreateAccount}
-          textStyle={{ color: themeStyles.linkText }}
-          style={styles.createAccountLink}
-        />
+        {/* 2. Create Account Link */}
+        <Button variant="link" className="mb-1 px-0" onPress={onCreateAccount}>
+          <Text className="text-sm font-semibold text-white">Create Account</Text>
+        </Button>
 
-        {/* 3. Mode Switch Button (Positioned at the bottom) */}
-        <A_Button
-          title={themeStyles.switchText}
-          variant="link"
-          onPress={onSwitchMode}
-          textStyle={{ color: themeStyles.switchTextColor, fontWeight: 'bold', fontSize: 16 }}
-          style={styles.switchButton}
-        />
+        {/* 3. Mode Switch Button */}
+        <Button variant="ghost" className="mt-auto px-0" onPress={onSwitchMode}>
+          <Text style={{ color: switchTextColor }} className="text-sm font-semibold">
+            {isCustomer ? 'LOGIN AS SUPPLIER' : 'LOGIN AS CUSTOMER'}
+          </Text>
+        </Button>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  fullScreenContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  contentWrapper: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center', // Vertically centers content
-    paddingTop: 50,
-    paddingBottom: 20,
-  },
-  logo: {
-    width: 250,
-    height: 100,
-    marginBottom: 60,
-  },
-  formArea: {
-    marginBottom: 5, // Reduce space between form and links
-  },
-  createAccountLink: {
-    marginBottom: 5,
-  },
-  switchButton: {
-    // Positioned below the main form content, slightly offset
-    marginTop: 10,
-  },
-});

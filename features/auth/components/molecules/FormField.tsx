@@ -1,27 +1,26 @@
 import React from 'react';
-import { View, StyleSheet, TextInputProps } from 'react-native';
-import { A_Text } from '../atoms/Text';         // Atom: Text for label
-import { A_TextInput } from '../atoms/TextInput'; // Atom: TextInput field
+import { View, TextInputProps } from 'react-native';
+import { Text } from '@/components/ui/text';
+import { Input } from '@/components/ui/input';
 
 interface AuthMoleculeFormFieldProps extends TextInputProps {
   label: string;
 }
 
-export const M_FormField: React.FC<AuthMoleculeFormFieldProps> = ({ label, style, ...inputProps }) => {
+export const M_FormField: React.FC<AuthMoleculeFormFieldProps> = ({
+  label,
+  className,
+  ...inputProps
+}) => {
   return (
-    <View style={[styles.container, style]}>
-      <A_Text variant="label" style={styles.label}>{label}</A_Text>
-      <A_TextInput {...inputProps} />
+    <View className={`mb-5 w-full ${className || ''}`}>
+      <Text className="mb-2 text-sm font-semibold text-white">{label}</Text>
+      <Input
+        style={{ backgroundColor: '#ffffff' }}
+        className="w-full rounded-lg px-4 py-2.5 text-base text-gray-900"
+        placeholderClassName="text-gray-400"
+        {...inputProps}
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  label: {
-    marginBottom: 5,
-  },
-});

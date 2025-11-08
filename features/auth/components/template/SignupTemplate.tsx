@@ -1,58 +1,42 @@
 import React from 'react';
-import { View, StyleSheet, Image, ViewProps } from 'react-native';
-// ⚠️ Adjust path to AppColors based on where you placed the config file
-import { AppColors } from '../../../../config/colors'; 
-import { A_Image } from '../atoms/Image';
-import { A_Button } from '../atoms/Button';
-import { O_FormArea } from '../organisms/FormArea';
+import { View, ViewProps } from 'react-native';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/text';
 import { M_FormField } from '../molecules/FormField';
 import { router } from 'expo-router';
+import { Image } from 'expo-image';
 
-const KonekTindaLogo = require('../../../../assets/images/splash.png'); // Adjust path
-
-
-// Define the state structure (essential for the keyof operator)
 interface SignupFormState {
-    username: string;
-    email: string;
-    password: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
-
 interface SignupTemplateProps extends ViewProps {
-  theme: 'supplier' | 'customer'; 
-  // Handlers for form input and submission
-  formState: SignupFormState; // Ensure formState uses this type too
-  
-  // 🔑 FIX HERE: Change 'string' to 'keyof SignupFormState'
+  theme: 'supplier' | 'customer';
+  formState: SignupFormState;
   onInputChange: (field: keyof SignupFormState, value: string) => void;
-  
   onSignup: () => void;
 }
 
-export const SignupTemplate: React.FC<SignupTemplateProps> = ({ 
-  theme, 
-  formState, 
+export const SignupTemplate: React.FC<SignupTemplateProps> = ({
+  theme,
+  formState,
   onInputChange,
   onSignup,
 }) => {
   const isCustomer = theme === 'customer';
-  
-  const themeStyles = {
-    background: isCustomer ? AppColors.CustomerBackground : AppColors.SupplierBackground,
-    buttonColor: isCustomer ? AppColors.CustomerButton : AppColors.SupplierButton,
-    linkText: isCustomer ? AppColors.CustomerLink : AppColors.SupplierLink,
-  };
+  const bgColor = isCustomer ? '#0d9488' : '#ef4444';
+  const buttonColor = isCustomer ? '#ef4444' : '#0d9488';
+  const linkColor = isCustomer ? '#fed7aa' : '#f3f4f6';
 
   return (
-    <View style={[styles.fullScreenContainer, { backgroundColor: themeStyles.background }]}>
-      <View style={styles.contentWrapper}>
-        
+    <View style={{ backgroundColor: bgColor }} className="flex-1 items-center">
+      <View className="w-full flex-1 items-center justify-center gap-6 px-4 pb-5 pt-8">
         {/* Logo */}
-        <A_Image source={KonekTindaLogo} style={styles.logo} />
 
         {/* Signup Form Area */}
-        <O_FormArea style={styles.formArea}>
+        <View className="w-full max-w-96 items-center">
           <M_FormField
             label="Username"
             placeholder="Choose a username"
@@ -73,57 +57,26 @@ export const SignupTemplate: React.FC<SignupTemplateProps> = ({
             value={formState.password}
             secureTextEntry
           />
-          
-          {/* Signup Button */}
-          <A_Button
-            title={`Register as ${isCustomer ? 'Customer' : 'Supplier'}`}
-            variant="primary"
-            onPress={onSignup}
-            style={[styles.signupButton, { backgroundColor: themeStyles.buttonColor }]}
-            textStyle={{ color: AppColors.White, fontSize: 18 }}
-          />
-        </O_FormArea>
-        
-        {/* Back to Login Link */}
-        <A_Button
-          title="Already have an account? Log in."
-          variant="link"
-          onPress={() => router.replace('/')}
-          textStyle={{ color: themeStyles.linkText }}
-          style={styles.loginLink}
-        />
 
+          {/* Signup Button */}
+          <Button
+            variant="default"
+            style={{ backgroundColor: buttonColor }}
+            className="w-full rounded-lg px-4 py-3"
+            onPress={onSignup}>
+            <Text className="text-center text-base font-semibold text-white">
+              Register as {isCustomer ? 'Customer' : 'Supplier'}
+            </Text>
+          </Button>
+        </View>
+
+        {/* Back to Login Link */}
+        <Button variant="ghost" className="px-0" onPress={() => router.replace('/')}>
+          <Text style={{ color: linkColor }} className="text-sm font-semibold">
+            Already have an account? Log in.
+          </Text>
+        </Button>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  fullScreenContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  contentWrapper: {
-    flex: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 50,
-    paddingBottom: 20,
-  },
-  logo: {
-    width: 250,
-    height: 100,
-    marginBottom: 40,
-  },
-  formArea: {
-    marginTop: 20, 
-  },
-  signupButton: {
-    width: '100%',
-    marginTop: 20,
-  },
-  loginLink: {
-    marginTop: 15,
-  }
-});
