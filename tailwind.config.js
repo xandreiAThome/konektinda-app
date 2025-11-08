@@ -2,36 +2,41 @@
 const { fontFamily } = require('tailwindcss/defaultTheme');
 
 module.exports = {
-  content: [
-    "./App.{js,jsx,ts,tsx}",
-    "./app/**/*.{js,jsx,ts,tsx}",
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./features/**/*.{js,jsx,ts,tsx}",
-  ],
-  presets: [require("nativewind/preset")],
+  darkMode: 'class',
+  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './features/**/*.{ts,tsx}'],
+  presets: [require('nativewind/preset')],
   theme: {
     extend: {
-
       fontFamily: {
         ...fontFamily,
-        'sans': ['Afacad-Regular', 'system-ui', 'sans-serif'], 
+        sans: ['Afacad-Regular', 'system-ui', 'sans-serif'],
         'sans-italic': ['Afacad-Italic'],
         'afacad-bold': ['Afacad-Bold'],
       },
 
       colors: {
         primary: {
-          DEFAULT: "#2C666E",  // Teal/green from header
+          DEFAULT: '#2C666E', // Teal/green from header
         },
         secondary: {
-          DEFAULT: "#8B6F47",  // Brown from "Tinda"
+          DEFAULT: '#8B6F47', // Brown from "Tinda"
         },
         accent: {
-          DEFAULT: "#F5A962",  // Orange from profile
+          DEFAULT: '#F5A962', // Orange from profile
         },
         'brand-red': '#EB5555',
-      }
+      },
     },
   },
-  plugins: [],
-}
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
+  theme: {
+    extend: {
+      fontFamily: {
+        Afacad: ['Afacad', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [require('tailwindcss-animate')],
+};
