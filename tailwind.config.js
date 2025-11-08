@@ -69,5 +69,12 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true,
   },
+  theme: {
+    extend: {
+      fontFamily: {
+        Afacad: ['Afacad', 'sans-serif']
+      }
+    }
+  },
   plugins: [require('tailwindcss-animate')],
 };
