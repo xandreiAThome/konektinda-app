@@ -1,6 +1,5 @@
 import React from 'react';
-import { Image as RNImage, View } from 'react-native';
-import { Image } from 'expo-image';
+import { Image, View } from 'react-native';
 
 interface ProductImageProps {
   source: any;

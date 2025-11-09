@@ -1,4 +1,4 @@
-export { ProductTemplate } from './template/ProductTemplate';
+export { ProductDetailTemplate } from './template/ProductDetailTemplate';
 
 // Organisms
 export { O_ProductInfo } from './organisms/ProductInfo';

@@ -1,8 +1,6 @@
 import React from 'react';
-import { View, ScrollView, Pressable } from 'react-native';
-import { Image } from 'expo-image';
+import { View, Pressable, FlatList, Image } from 'react-native';
 import { useRouter } from 'expo-router';
-import { O_ProductHeaderBar } from '../organisms/ProductHeaderBar';
 import { O_ProductInfo } from '../organisms/ProductInfo';
 import { A_SellerInfo } from '../atoms/SellerInfo';
 import { M_AddToCartButton } from '../atoms/AddToCartButton';
@@ -10,6 +8,8 @@ import { O_ReviewsSection } from '../organisms/ReviewsSection';
 import { Text } from '@/components/ui/text';
 import { Alert } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
+import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
+import { useProductById } from '../../hooks';
 
 interface Review {
   id: string;
@@ -19,12 +19,8 @@ interface Review {
   reviewerImage: any;
 }
 
-interface ProductTemplateProps {
-  brandName: string;
-  productName: string;
-  price: number;
-  size: string;
-  description: string;
+interface ProductDetailProps {
+  product_id: string;
 }
 
 // Temporary mock data
@@ -46,14 +42,17 @@ const TEMP_REVIEWS: Review[] = [
   },
 ];
 
-export const ProductTemplate: React.FC<ProductTemplateProps> = ({
-  brandName,
-  productName,
-  price,
-  size,
-  description,
-}) => {
+// Component for displaying product content
+export const ProductTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
+
+  // Fetch product data from API
+  const { data: productData, isLoading, isError } = useProductById(product_id || '');
+
+  // Extract data from the nested structure
+  const product = productData?.product;
+  const variant = productData?.variant;
+  const category = productData?.category;
 
   const handleBackPress = () => {
     router.push('/(tabs)/listing');
@@ -62,50 +61,110 @@ export const ProductTemplate: React.FC<ProductTemplateProps> = ({
   const handleAddToCart = () => {
     Alert.alert('Success', 'Product added to cart!');
   };
-  return (
-    <View className="flex-1 bg-white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Back Button */}
-        <Pressable onPress={handleBackPress} className="m-2">
-          <ChevronLeft />
-        </Pressable>
 
-        {/* Product Image */}
-        <View className="items-center justify-center py-6">
-          <Image
-            source={TEMP_PRODUCT_IMAGE}
-            style={{ resizeMode: 'contain' }}
-            className="h-40 w-72"
+  if (isLoading) {
+    return <ProductDetailSkeleton />;
+  }
+
+  if (isError || !product) {
+    return (
+      <View className="flex-1 items-center justify-center bg-white">
+        <Text className="text-center text-red-500">Failed to load product</Text>
+      </View>
+    );
+  }
+
+  // Sections to render in the list
+  const sections = [
+    {
+      id: 'header',
+      component: (
+        <View key="header">
+          {/* Back Button */}
+          <Pressable onPress={handleBackPress} className="m-2">
+            <ChevronLeft />
+          </Pressable>
+
+          {/* Product Image */}
+          <View className="items-center justify-center py-6">
+            <Image
+              source={require('@/assets/images/temp_image.png')}
+              className="h-40 w-72"
+              style={{ resizeMode: 'contain' }}
+            />
+          </View>
+
+          {/* Product Information */}
+          <View className="items-center px-4 py-4">
+            {/* Category */}
+            {category?.category_name && (
+              <Text className="text-xs font-semibold text-gray-500">{category.category_name}</Text>
+            )}
+
+            {/* Product Name */}
+            <Text className="text-center text-lg font-bold text-gray-800">
+              {product.product_name}
+            </Text>
+
+            {/* Variant Name */}
+            {variant?.variant_name && (
+              <Text className="mt-1 text-sm text-gray-600">{variant.variant_name}</Text>
+            )}
+
+            {/* Price and Stock */}
+            <View className="mt-3 flex-row items-center gap-4">
+              <Text className="text-xl font-bold text-red-500">₱{variant?.price?.toFixed(2)}</Text>
+              <Text
+                className={`text-sm font-semibold ${variant?.stock && variant.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {variant?.stock && variant.stock > 0 ? `${variant.stock} in stock` : 'Out of stock'}
+              </Text>
+            </View>
+
+            {/* Description */}
+            {product.product_description && (
+              <Text className="mt-4 text-center text-sm leading-6 text-gray-700">
+                {product.product_description}
+              </Text>
+            )}
+          </View>
+
+          {/* Seller Info */}
+          <A_SellerInfo
+            sellerImage={require('@/assets/images/Avatar.png')}
+            sellerName="SELLER NAME"
+            listingDate="XX/XX/XXXX"
           />
+
+          {/* Add to Cart Button */}
+          <M_AddToCartButton onPress={handleAddToCart} />
         </View>
-
-        {/* Product Information */}
-        <O_ProductInfo
-          brandName={brandName}
-          productName={productName}
-          size={size}
-          price={price}
-          description={description}
-        />
-
-        {/* Seller Info */}
-        <A_SellerInfo
-          sellerImage={require('@/assets/images/Avatar.png')}
-          sellerName="SELLER NAME"
-          listingDate="XX/XX/XXXX"
-        />
-
-        {/* Add to Cart Button */}
-        <M_AddToCartButton onPress={handleAddToCart} />
-
-        {/* Reviews Section */}
-        {TEMP_REVIEWS && TEMP_REVIEWS.length > 0 && <O_ReviewsSection reviews={TEMP_REVIEWS} />}
-
-        {/* Similar Products Section */}
-        <View className="px-4 py-6">
+      ),
+    },
+    {
+      id: 'reviews',
+      component: (
+        <View key="reviews">
+          {TEMP_REVIEWS && TEMP_REVIEWS.length > 0 && <O_ReviewsSection reviews={TEMP_REVIEWS} />}
+        </View>
+      ),
+    },
+    {
+      id: 'similar',
+      component: (
+        <View key="similar" className="px-4 py-6">
           <Text className="mb-4 text-lg font-bold text-red-500">Products similar to this...</Text>
         </View>
-      </ScrollView>
-    </View>
+      ),
+    },
+  ];
+
+  return (
+    <FlatList
+      data={sections}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => item.component}
+      className="flex-1 bg-white"
+      scrollEnabled={true}
+    />
   );
 };

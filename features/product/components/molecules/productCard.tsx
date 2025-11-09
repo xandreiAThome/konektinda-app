@@ -2,68 +2,68 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ImagePlaceholder } from '../atoms/imagePlaceholder';
-import { Product } from '../../constants/mockData';
+import { ProductWithVariantAndCategory } from '../../types';
 
-type ProductCardProps = Product & { onPress?: (product: Product) => void };
+type ProductCardProps = ProductWithVariantAndCategory;
 
-export const ProductCard: React.FC<ProductCardProps> = ({
-  id,
-  brand,
-  name,
-  price,
-  imageUrl,
-  onPress,
-}) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ variant, product, category }) => {
   const router = useRouter();
 
   const handlePress = () => {
-    // Extract size from product name (e.g., "Soap (150g)" -> "150g")
-    const sizeMatch = name?.match(/\(([^)]+)\)/);
-    const size = sizeMatch ? sizeMatch[1] : '150g';
-
-    // Generate description based on brand and product
-    const description = `Premium ${brand} ${name}. High-quality personal care product with excellent value. Perfect for daily use and recommended by customers. Gentle on skin with long-lasting fragrance.`;
-
-    if (onPress) {
-      onPress({ id, brand, name, price, imageUrl });
-    } else {
-      // Default navigation to product detail screen
-      router.push({
-        pathname: '/(tabs)/product_page',
-        params: { productId: id, brand, name, price, size, description },
-      });
-    }
+    router.push({
+      pathname: '/(tabs)/product',
+      params: {
+        product_id: String(product.product_id),
+      },
+    });
   };
 
+  // Calculate discounted price if discount exists
+  const discountedPrice =
+    variant.discount > 0 ? variant.price * (1 - variant.discount / 100) : variant.price;
+
   return (
-    // FIX:
-    // 1. Re-added 'w-[48%]' for the 2-column grid
-    // 2. Kept 'flex-row' for the internal layout
     <Pressable onPress={handlePress} className="mb-4 w-[48%]">
-      <View className="flex-row items-center overflow-hidden rounded-xl bg-gray-100 px-2 py-4">
-        {/* 1. Image Placeholder (now a small square) */}
-        <ImagePlaceholder />
+      <View className="overflow-hidden rounded-xl bg-gray-100 p-3">
+        {/* Image Placeholder */}
+        <View className="mb-2 h-20 w-full items-center justify-center">
+          <ImagePlaceholder />
+        </View>
 
-        {/* 2. Text Content */}
-        {/* FIX: 
-          - 'flex-1' makes this View take the remaining width
-          - 'p-2' reduces padding to fit the small card
-        */}
-        <View className="flex-1 pl-2">
-          <Text className="font-sans text-[11px] text-[#1E1E1E]" numberOfLines={1}>
-            {brand}
+        {/* Text Content */}
+        <View>
+          {/* Category */}
+          <Text className="font-sans text-[9px] text-gray-500">{category.category_name}</Text>
+
+          {/* Product Name */}
+          <Text className="font-sans text-[11px] font-semibold text-[#1E1E1E]" numberOfLines={2}>
+            {product.product_name}
           </Text>
 
-          {/* FIX: Removed 'font-afacad'. It will now use 'font-sans'
-            (which is Afacad-Regular) by default.
-          */}
-          <Text className="my-1 font-sans text-[10px] text-[#1E1E1E]" numberOfLines={2}>
-            {name}
-          </Text>
+          {/* Variant Name */}
+          <Text className="my-1 font-sans text-[9px] text-gray-600">{variant.variant_name}</Text>
 
-          {/* USE BOLD FONT */}
-          <Text className="font-sans-italic text-[11px] text-[#EB5555]" numberOfLines={1}>
-            Php {price.toFixed(2)}
+          {/* Price */}
+          <View className="flex-row items-baseline gap-1">
+            <Text className="font-sans text-[11px] font-bold text-[#EB5555]">
+              ₱{discountedPrice.toFixed(2)}
+            </Text>
+            {variant.discount > 0 && (
+              <>
+                <Text className="font-sans text-[8px] text-gray-400 line-through">
+                  ₱{variant.price.toFixed(2)}
+                </Text>
+                <Text className="font-sans text-[8px] font-bold text-red-600">
+                  -{variant.discount}%
+                </Text>
+              </>
+            )}
+          </View>
+
+          {/* Stock Status */}
+          <Text
+            className={`font-sans text-[8px] ${variant.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            {variant.stock > 0 ? `${variant.stock} in stock` : 'Out of stock'}
           </Text>
         </View>
       </View>

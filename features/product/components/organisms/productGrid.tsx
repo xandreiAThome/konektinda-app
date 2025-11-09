@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { ProductCard } from '../molecules/productCard';
-import { Product } from '../../constants/mockData';
+import { ProductWithVariantAndCategory } from '../../types';
 
 interface ProductGridProps {
   title: string;
-  products: Product[];
+  products: ProductWithVariantAndCategory[];
 }
 
 export const ProductGrid: React.FC<ProductGridProps> = ({ title, products }) => {
@@ -14,19 +14,14 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ title, products }) => 
       {/* Title */}
       <Text className="font-afacad-bold mb-4 text-xl text-[#EB5555]">{title}</Text>
 
-      {/* 2. Grid */}
-      {/* FIX: Added 'flex-row flex-wrap justify-between' back
-        This creates the 2-column layout.
-      */}
+      {/* 2-Column Grid */}
       <View className="flex-row flex-wrap justify-between">
-        {products.map((product) => (
+        {products.map((item) => (
           <ProductCard
-            key={product.id}
-            id={product.id}
-            brand={product.brand}
-            name={product.name}
-            price={product.price}
-            imageUrl={product.imageUrl}
+            key={`${item.product.product_id}-${item.variant.product_variant_id}`}
+            variant={item.variant}
+            product={item.product}
+            category={item.category}
           />
         ))}
       </View>

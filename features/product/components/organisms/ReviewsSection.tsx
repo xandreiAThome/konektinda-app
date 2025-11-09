@@ -29,6 +29,7 @@ export const O_ReviewsSection: React.FC<ReviewsSectionProps> = ({
         keyExtractor={(item) => item.id}
         pagingEnabled
         scrollEventThrottle={16}
+        scrollEnabled={false}
         renderItem={({ item }) => (
           <M_ReviewCard
             reviewText={item.reviewText}
