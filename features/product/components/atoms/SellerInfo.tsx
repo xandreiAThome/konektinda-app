@@ -16,10 +16,12 @@ export const A_SellerInfo: React.FC<SellerInfoProps> = ({
   ...viewProps
 }) => {
   return (
-    <View className={`my-4 flex-row items-center justify-center gap-3 ${className}`} {...viewProps}>
+    <View
+      className={`my-4 flex-row items-center justify-center gap-3 text-black ${className}`}
+      {...viewProps}>
       <Image source={sellerImage} className="h-10 w-10" />
       <View>
-        <Text className="text-sm font-semibold">Distributed by {sellerName}</Text>
+        <Text className="text-sm font-semibold text-black">Distributed by {sellerName}</Text>
         <Text className="text-xs text-gray-600">Product listed on {listingDate}</Text>
       </View>
     </View>
