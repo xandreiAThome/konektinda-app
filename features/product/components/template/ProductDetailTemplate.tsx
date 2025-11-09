@@ -39,7 +39,7 @@ const TEMP_REVIEWS: Review[] = [
     reviewText: 'Excellent quality and fast shipping',
     rating: 5,
     reviewDate: 'XX/XX/XXXX',
-    reviewerImage: require('@/assets/images/temp_image.png'),
+    reviewerImage: require('@/assets/images/konektinda-logo.png'),
   },
 ];
 

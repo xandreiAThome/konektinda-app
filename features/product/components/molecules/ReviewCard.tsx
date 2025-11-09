@@ -2,6 +2,10 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { Rating } from 'react-native-ratings';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
+
+cssInterop(ExpoImage, { className: 'style' });
 
 interface ReviewCardProps {
   reviewText: string;
@@ -41,13 +45,9 @@ export const M_ReviewCard: React.FC<ReviewCardProps> = ({
             </Text>
           </View>
         </View>
-        <Image
+        <ExpoImage
           source={reviewerImage}
-          className="absolute h-16 w-16 rounded-full"
-          style={{
-            left: -16,
-            top: -16,
-          }}
+          className="absolute -left-4 -top-4 h-16 w-16 rounded-full"
         />
       </View>
     </View>
