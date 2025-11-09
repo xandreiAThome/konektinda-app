@@ -29,11 +29,14 @@ export default function TabsLayout() {
         headerLeft: () => (
           <Image
             source={require('@/assets/images/KonekTinda_Logo.png')}
-            className="ml-4 h-10 w-16"
+            style={{ width: 64, height: 40, marginLeft: 16 }}
           />
         ),
         headerRight: () => (
-          <Image source={require('@/assets/images/avatar_user.png')} className="mr-4 h-9 w-9" />
+          <Image
+            source={require('@/assets/images/avatar_user.png')}
+            style={{ width: 36, height: 36, marginRight: 16 }}
+          />
         ),
         headerTitle: '',
       }}>
