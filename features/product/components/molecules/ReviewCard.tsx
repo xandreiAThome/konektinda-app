@@ -1,8 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { Text } from '@/components/ui/text';
 import { Rating } from 'react-native-ratings';
-import { Image } from 'expo-image';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
+
+cssInterop(ExpoImage, { className: 'style' });
 
 interface ReviewCardProps {
   reviewText: string;
@@ -23,7 +26,7 @@ export const M_ReviewCard: React.FC<ReviewCardProps> = ({
         <View className="flex-1 rounded-lg bg-gray-200 p-5">
           <View className="flex-1 flex-col items-start justify-start">
             <View className="mb-3 flex-row items-center gap-3">
-              <Text className="ml-8 text-xs font-semibold">{reviewText}</Text>
+              <Text className="ml-8 text-xs font-semibold text-black">{reviewText}</Text>
               <Rating
                 type="star"
                 ratingCount={5}
@@ -42,7 +45,10 @@ export const M_ReviewCard: React.FC<ReviewCardProps> = ({
             </Text>
           </View>
         </View>
-        <Image source={reviewerImage} className="absolute -left-4 -top-4 h-16 w-16 rounded-full" />
+        <ExpoImage
+          source={reviewerImage}
+          className="absolute -left-4 -top-4 h-16 w-16 rounded-full"
+        />
       </View>
     </View>
   );

@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, ViewProps } from 'react-native';
+import { View, ViewProps, Image } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { O_LoginArea } from '../organisms/LoginArea';
-import { Image } from 'expo-image';
 
 interface LoginTemplateProps extends ViewProps {
   theme: 'supplier' | 'customer';
@@ -27,13 +26,17 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
   const switchTextColor = '#ffffff';
 
   return (
-    <View style={{ backgroundColor: bgColor }} className="flex-1 items-center">
-      <View className="w-full flex-1 items-center justify-center gap-8 px-4 pb-5 pt-8">
+    <View style={{ backgroundColor: bgColor }} className="flex flex-1 items-center">
+      <View className="flex w-full flex-1 flex-col items-center justify-center px-2">
         {/* Logo */}
-        <Image source={require('@/assets/images/KonekTinda_Logo.png')} className="h-32 w-64" />
+        <Image
+          source={require('@/assets/images/KonekTinda_Logo.png')}
+          className="h-32 w-64"
+          style={{ resizeMode: 'contain' }}
+        />
 
         {/* 1. Login Form Area */}
-        <View className="w-full max-w-sm items-center">
+        <View className="flex w-full max-w-sm items-center justify-center">
           <O_LoginArea onLogin={onLogin} onForgotPassword={onForgotPassword} />
         </View>
 
@@ -43,7 +46,7 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
         </Button>
 
         {/* 3. Mode Switch Button */}
-        <Button variant="ghost" className="mt-auto px-0" onPress={onSwitchMode}>
+        <Button variant="ghost" className="" onPress={onSwitchMode}>
           <Text style={{ color: switchTextColor }} className="text-sm font-semibold">
             {isCustomer ? 'LOGIN AS SUPPLIER' : 'LOGIN AS CUSTOMER'}
           </Text>

@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, ViewProps } from 'react-native';
+import { View, ViewProps, Image } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { M_FormField } from '../molecules/FormField';
 import { router } from 'expo-router';
-import { Image } from 'expo-image';
 
 interface SignupFormState {
   username: string;

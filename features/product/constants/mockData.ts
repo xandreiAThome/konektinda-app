@@ -1,32 +1,137 @@
-// Defines the type for a product
-export type Product = {
-  id: string;
-  brand: string;
-  name: string;
-  price: number;
-  imageUrl?: string; // Optional image URL
-};
+import { Product } from '../types';
 
 // Mock data for the "Most Popular Items"
 export const MOST_POPULAR_PRODUCTS: Product[] = [
-  { id: 'p1', brand: 'Palmolive', name: 'Creamy Milk Soap (150g)', price: 45.0 },
-  { id: 'p2', brand: 'Safeguard', name: 'Anti-Bacterial Soap (65g)', price: 38.5 },
-  { id: 'p3', brand: 'Dove', name: 'Moisturizing Cream Bar (100g)', price: 95.0 },
-  { id: 'p4', brand: 'Calamansi Fresh', name: 'Natural Soap (120g)', price: 52.0 },
-  { id: 'p5', brand: 'Likas Papaya', name: 'Papaya Whitening Soap (135g)', price: 48.75 },
-  { id: 'p6', brand: 'Human Nature', name: 'Organic Bath Soap (150g)', price: 89.0 },
-  { id: 'p7', brand: 'Nucifera', name: 'Coconut Oil Soap (125g)', price: 65.0 },
-  { id: 'p8', brand: 'Belo Essentials', name: 'Whitening Soap (90g)', price: 55.5 },
+  {
+    product_id: 1,
+    product_category_id: 1,
+    supplier_id: 1,
+    product_name: 'Creamy Milk Soap (150g)',
+    product_description: 'Gentle moisturizing soap with milk extract and natural oils',
+    is_active: true,
+  },
+  {
+    product_id: 2,
+    product_category_id: 1,
+    supplier_id: 2,
+    product_name: 'Anti-Bacterial Soap (65g)',
+    product_description: 'Protects against bacteria and germs with proven antibacterial formula',
+    is_active: true,
+  },
+  {
+    product_id: 3,
+    product_category_id: 1,
+    supplier_id: 3,
+    product_name: 'Moisturizing Cream Bar (100g)',
+    product_description: 'Rich moisturizing formula that cleanses while protecting skin',
+    is_active: true,
+  },
+  {
+    product_id: 4,
+    product_category_id: 1,
+    supplier_id: 4,
+    product_name: 'Natural Soap (120g)',
+    product_description: 'Natural calamansi extract for refreshing daily cleansing',
+    is_active: true,
+  },
+  {
+    product_id: 5,
+    product_category_id: 1,
+    supplier_id: 5,
+    product_name: 'Papaya Whitening Soap (135g)',
+    product_description: 'Whitening soap with papaya extract for brighter, radiant skin',
+    is_active: true,
+  },
+  {
+    product_id: 6,
+    product_category_id: 1,
+    supplier_id: 6,
+    product_name: 'Organic Bath Soap (150g)',
+    product_description: '100% organic ingredients, hypoallergenic and eco-friendly',
+    is_active: true,
+  },
+  {
+    product_id: 7,
+    product_category_id: 1,
+    supplier_id: 7,
+    product_name: 'Coconut Oil Soap (125g)',
+    product_description: 'Premium coconut oil base for deep moisturizing and nourishment',
+    is_active: true,
+  },
+  {
+    product_id: 8,
+    product_category_id: 1,
+    supplier_id: 8,
+    product_name: 'Whitening Soap (90g)',
+    product_description: 'Dermatologically tested whitening soap for visible results',
+    is_active: true,
+  },
 ];
 
 // Mock data for the "Recently Purchased"
 export const LAST_PURCHASED_PRODUCTS: Product[] = [
-  { id: 'r1', brand: 'Lux', name: 'Soft Rose Soap (170g)', price: 72.0 },
-  { id: 'r2', brand: 'Ivory', name: 'Pure & Gentle Soap (120g)', price: 68.0 },
-  { id: 'r3', brand: 'Zest', name: 'Energizing Citrus Soap (100g)', price: 42.0 },
-  { id: 'r4', brand: 'Carex', name: 'Anti-Bacterial Hand Soap (250ml)', price: 99.0 },
-  { id: 'r5', brand: 'Mysore Sandal', name: 'Sandalwood Soap (150g)', price: 78.5 },
-  { id: 'r6', brand: 'Herbal Care', name: 'Neem & Tulsi Soap (100g)', price: 56.0 },
-  { id: 'r7', brand: 'Ponds', name: 'Detox Activated Charcoal Soap (125g)', price: 85.0 },
-  { id: 'r8', brand: 'Sunsilk', name: 'Moisturizing Body Wash (200ml)', price: 120.0 },
+  {
+    product_id: 9,
+    product_category_id: 1,
+    supplier_id: 1,
+    product_name: 'Soft Rose Soap (170g)',
+    product_description: 'Luxurious rose-scented soap for a pampering experience',
+    is_active: true,
+  },
+  {
+    product_id: 10,
+    product_category_id: 1,
+    supplier_id: 2,
+    product_name: 'Pure & Gentle Soap (120g)',
+    product_description: 'Gentle and pure formula suitable for all skin types',
+    is_active: true,
+  },
+  {
+    product_id: 11,
+    product_category_id: 1,
+    supplier_id: 3,
+    product_name: 'Energizing Citrus Soap (100g)',
+    product_description: 'Energizing citrus scent to invigorate your daily shower',
+    is_active: true,
+  },
+  {
+    product_id: 12,
+    product_category_id: 1,
+    supplier_id: 4,
+    product_name: 'Anti-Bacterial Hand Soap (250ml)',
+    product_description: 'Effective hand soap with antibacterial protection all day',
+    is_active: true,
+  },
+  {
+    product_id: 13,
+    product_category_id: 1,
+    supplier_id: 5,
+    product_name: 'Sandalwood Soap (150g)',
+    product_description: 'Premium sandalwood extract for authentic aromatherapy',
+    is_active: true,
+  },
+  {
+    product_id: 14,
+    product_category_id: 1,
+    supplier_id: 6,
+    product_name: 'Neem & Tulsi Soap (100g)',
+    product_description: 'Herbal blend of neem and tulsi for natural skin care',
+    is_active: true,
+  },
+  {
+    product_id: 15,
+    product_category_id: 1,
+    supplier_id: 7,
+    product_name: 'Detox Activated Charcoal Soap (125g)',
+    product_description: 'Detoxifying charcoal formula for deep cleansing',
+    is_active: true,
+  },
+  {
+    product_id: 16,
+    product_category_id: 1,
+    supplier_id: 8,
+    product_name: 'Moisturizing Body Wash (200ml)',
+    product_description: 'Moisturizing body wash that leaves skin soft and hydrated',
+    is_active: true,
+  },
 ];
