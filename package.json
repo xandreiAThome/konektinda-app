@@ -11,8 +11,7 @@
     "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "format": "prettier --write .",
     "cy:open": "cypress open",
-    "cy:run": "cypress run",
-    "prepare": "husky"
+    "cy:run": "cypress run"
   },
   "dependencies": {
     "@react-navigation/native": "^7.0.0",
