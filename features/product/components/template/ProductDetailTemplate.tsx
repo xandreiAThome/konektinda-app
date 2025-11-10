@@ -9,6 +9,7 @@ import { Alert } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
+import { AddToCartSheet } from '../organisms/addToCartSheet';
 
 interface Review {
   id: string;
@@ -44,6 +45,8 @@ const TEMP_REVIEWS: Review[] = [
 export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
 
+  const [isCartSheetVisisble, setIsCartSheetVisible] = React.useState(false);
+
   // Fetch product data from API
   const { data: product, isLoading, isError } = useProductById(product_id || '');
 
@@ -52,7 +55,7 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
   };
 
   const handleAddToCart = () => {
-    Alert.alert('Success', 'Product added to cart!');
+    setIsCartSheetVisible(true);
   };
 
   if (isLoading) {
@@ -160,12 +163,20 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
   ];
 
   return (
-    <FlatList
-      data={sections}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => item.component}
-      className="flex-1 bg-white"
-      scrollEnabled={true}
-    />
+    <View className="flex-1">
+      <FlatList
+        data={sections}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => item.component}
+        className="flex-1 bg-white"
+        scrollEnabled={true}
+      />
+
+      <AddToCartSheet
+        visible={isCartSheetVisisble}
+        onClose={() => setIsCartSheetVisible(false)}
+        product={product}
+      />
+    </View>
   );
 };
