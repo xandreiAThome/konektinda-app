@@ -1,8 +1,12 @@
 import React from 'react';
-import { View, ViewProps, Image } from 'react-native';
+import { View, ViewProps } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { O_LoginArea } from '../organisms/LoginArea';
+
+cssInterop(ExpoImage, { className: 'style' });
 
 interface LoginTemplateProps extends ViewProps {
   theme: 'supplier' | 'customer';
@@ -29,11 +33,13 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
     <View style={{ backgroundColor: bgColor }} className="flex flex-1 items-center">
       <View className="flex w-full flex-1 flex-col items-center justify-center px-2">
         {/* Logo */}
-        <Image
-          source={require('@/assets/images/KonekTinda_Logo.png')}
-          className="h-32 w-64"
-          style={{ resizeMode: 'contain' }}
-        />
+        <View className="flex items-center justify-center p-8">
+          <ExpoImage
+            source={require('@/assets/images/KonekTinda_Logo.png')}
+            className="h-32 w-64"
+            contentFit="contain"
+          />
+        </View>
 
         {/* 1. Login Form Area */}
         <View className="flex w-full max-w-sm items-center justify-center">

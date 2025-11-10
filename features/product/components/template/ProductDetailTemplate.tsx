@@ -1,6 +1,10 @@
 import React from 'react';
-import { View, FlatList, Pressable, Image } from 'react-native';
+import { View, FlatList, Pressable } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
 import { useRouter } from 'expo-router';
+
+cssInterop(ExpoImage, { className: 'style' });
 import { A_SellerInfo } from '../atoms/SellerInfo';
 import { M_AddToCartButton } from '../atoms/AddToCartButton';
 import { O_ReviewsSection } from '../organisms/ReviewsSection';
@@ -84,10 +88,10 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
 
           {/* Product Image */}
           <View className="items-center justify-center py-6">
-            <Image
+            <ExpoImage
               source={require('@/assets/images/temp_image.png')}
               className="h-40 w-72"
-              style={{ resizeMode: 'contain' }}
+              contentFit="contain"
             />
           </View>
 

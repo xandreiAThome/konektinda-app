@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Image } from 'react-native';
-import { Text } from '@/components/ui/text';
-import { Rating } from 'react-native-ratings';
+import { View } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { cssInterop } from 'nativewind';
+import { Text } from '@/components/ui/text';
+import { Rating } from 'react-native-ratings';
 
 cssInterop(ExpoImage, { className: 'style' });
 

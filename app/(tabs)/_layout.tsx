@@ -1,8 +1,10 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Image } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { cssInterop } from 'nativewind';
+cssInterop(ExpoImage, { className: 'style' });
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
@@ -27,13 +29,13 @@ export default function TabsLayout() {
           borderBottomWidth: 0,
         },
         headerLeft: () => (
-          <Image
+          <ExpoImage
             source={require('@/assets/images/KonekTinda_Logo.png')}
             style={{ width: 64, height: 40, marginLeft: 16 }}
           />
         ),
         headerRight: () => (
-          <Image
+          <ExpoImage
             source={require('@/assets/images/avatar_user.png')}
             style={{ width: 36, height: 36, marginRight: 16 }}
           />

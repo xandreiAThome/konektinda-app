@@ -1,9 +1,13 @@
 import React from 'react';
-import { View, ViewProps, Image } from 'react-native';
+import { View, ViewProps } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { M_FormField } from '../molecules/FormField';
 import { router } from 'expo-router';
+
+cssInterop(ExpoImage, { className: 'style' });
 
 interface SignupFormState {
   username: string;
