@@ -8,7 +8,7 @@ on:
     branches: [main, staging, dev]
 
 env:
-  NODE_ENV: production
+  NODE_ENV: development
   # Use a secret for your API key
   EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
 
