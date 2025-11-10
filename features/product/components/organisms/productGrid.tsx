@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { ProductCard } from '../molecules/productCard';
-import { ProductWithVariantAndCategory } from '../../types';
+import { Product } from '../../types';
 
 interface ProductGridProps {
   title: string;
-  products: ProductWithVariantAndCategory[];
+  products: Product[];
 }
 
 export const ProductGrid: React.FC<ProductGridProps> = ({ title, products }) => {
@@ -16,13 +16,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({ title, products }) => 
 
       {/* 2-Column Grid */}
       <View className="flex-row flex-wrap justify-between">
-        {products.map((item) => (
-          <ProductCard
-            key={`${item.product.product_id}-${item.variant.product_variant_id}`}
-            variant={item.variant}
-            product={item.product}
-            category={item.category}
-          />
+        {products.map((product) => (
+          <ProductCard key={product.product_id} product={product} />
         ))}
       </View>
     </View>

@@ -20,6 +20,8 @@ export interface Product {
   product_name: string;
   product_description?: string | null;
   is_active: boolean;
+  category: ProductCategory;
+  variants: ProductVariant[];
 }
 
 export interface ProductWithVariantAndCategory {

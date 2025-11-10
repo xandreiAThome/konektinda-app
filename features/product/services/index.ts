@@ -1,7 +1,7 @@
 export async function fetchAllProducts() {
   // Temporary 3 second delay to see loading UI
 
-  const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/product-variants`);
+  const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/products`);
   if (!res.ok) {
     throw new Error('Failed to fetch products');
   }
@@ -11,7 +11,7 @@ export async function fetchAllProducts() {
 export async function fetchProductById(id: string) {
   // Temporary 2 second delay to see loading UI
 
-  const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/product-variants/${id}`);
+  const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/products/${id}`);
   if (!res.ok) {
     throw new Error('Failed to fetch product');
   }

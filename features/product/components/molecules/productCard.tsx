@@ -2,12 +2,22 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { ImagePlaceholder } from '../atoms/imagePlaceholder';
-import { ProductWithVariantAndCategory } from '../../types';
+import { Product } from '../../types';
 
-type ProductCardProps = ProductWithVariantAndCategory;
+interface ProductCardProps {
+  product: Product;
+}
 
-export const ProductCard: React.FC<ProductCardProps> = ({ variant, product, category }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const router = useRouter();
+
+  // Get first variant (primary variant)
+  const variant = product.variants?.[0];
+  const category = product.category;
+
+  if (!variant) {
+    return null; // Don't render if no variants
+  }
 
   const handlePress = () => {
     router.push({
@@ -33,7 +43,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ variant, product, cate
         {/* Text Content */}
         <View>
           {/* Category */}
-          <Text className="font-sans text-[9px] text-gray-500">{category.category_name}</Text>
+          <Text className="font-sans text-[9px] text-gray-500">{category?.category_name}</Text>
 
           {/* Product Name */}
           <Text className="font-sans text-[11px] font-semibold text-[#1E1E1E]" numberOfLines={2}>
