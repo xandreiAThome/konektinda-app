@@ -1,8 +1,8 @@
 ---
 name: Lint-Test Workflow
 
-on: 
-  push: 
+on:
+  push:
     branches: [main, staging, dev]
   pull_request:
     branches: [main, staging, dev]
@@ -31,7 +31,8 @@ jobs:
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
-          start: npm run web
+          build: npx expo export -p web
+          start: npx expo serve
           wait-on: 'http://localhost:8081'
           browser: chrome
 
