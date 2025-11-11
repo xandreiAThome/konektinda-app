@@ -13,3 +13,7 @@ describe('Sample Test', () => {
     cy.get('#root div.font-bold.text-foreground').should('have.text', '2');
   });
 });
+
+it('x', function () {
+  cy.visit('http://localhost:8081');
+});
