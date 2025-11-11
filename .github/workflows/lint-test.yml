@@ -1,8 +1,8 @@
 ---
 name: Lint-Test Workflow
 
-on: 
-  push: 
+on:
+  push:
     branches: [main, staging, dev]
   pull_request:
     branches: [main, staging, dev]
