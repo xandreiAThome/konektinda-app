@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, Pressable, Alert } from 'react-native';
-import { ImagePlaceholder } from '../atoms/imagePlaceholder';
+import { ImagePlaceholder } from '../../product/components/atoms/imagePlaceholder';
 import { QuantityCounter } from '../atoms/quantityCounter';
-import { Product } from '../../types';
-import { M_AddToCartButton } from '../atoms/AddToCartButton';
-import { useAddItemToCart } from '../../hooks';
+import { Product } from '../../product/types';
+import { M_AddToCartButton } from '../../product/components/atoms/AddToCartButton';
+import { useAddItemToCart } from '../../product/hooks';
 
 interface AddToCartSheetProps {
   visible: boolean;

@@ -9,7 +9,7 @@ import { Alert } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
-import { AddToCartSheet } from '../organisms/addToCartSheet';
+import { AddToCartSheet } from '../../../cart/organisms/addToCartSheet';
 
 interface Review {
   id: string;
