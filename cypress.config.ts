@@ -6,7 +6,20 @@ export default defineConfig({
     specPattern: 'cypress/component/**/*.cy.{js,jsx,ts,tsx}',
     devServer: {
       framework: 'react',
-      bundler: 'vite',
+      bundler: 'webpack',
+      webpackConfig: {
+        module: {
+          rules: [
+            {
+              test: /\.tsx?$/,
+              use: {
+                loader: 'ts-loader',
+              },
+            },
+          ],
+        },
+        devtool: 'inline-source-map',
+      },
     },
   },
   e2e: {
@@ -15,8 +28,9 @@ export default defineConfig({
     viewportWidth: 390,
     viewportHeight: 844,
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
-    setupNodeEvents(on, config) {
+    setupNodeEvents(_on, _config) {
       // implement node event listeners here
     },
   },
+  projectId: 'konektinda-app',
 });

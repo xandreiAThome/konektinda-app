@@ -3,6 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "sourceMap": true,
+    "inlineSources": true,
     "paths": {
       "@/*": ["*"]
     }
