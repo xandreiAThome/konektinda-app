@@ -28,9 +28,14 @@ export default defineConfig({
     viewportWidth: 390,
     viewportHeight: 844,
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    defaultCommandTimeout: 10000,
     setupNodeEvents(_on, _config) {
       // implement node event listeners here
     },
   },
   projectId: 'konektinda-app',
+  retries: {
+    runMode: 2,
+    openMode: 0,
+  },
 });
