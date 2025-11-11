@@ -3,7 +3,7 @@ describe('Catalog and Product Details Flow', () => {
   const password = 'CypressTestPass123';
 
   beforeEach(() => {
-    cy.visit('http://localhost:8081');
+    cy.visit('/');
 
     // 1. Type Username
     cy.get('input[placeholder="Enter your username"]').click();
