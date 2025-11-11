@@ -31,8 +31,7 @@ jobs:
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
-          build: npx expo export -p web
-          start: npx expo serve
+          start: npm run web
           wait-on: 'http://localhost:8081'
           browser: chrome
 
