@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ViewProps, Dimensions } from 'react-native';
+import { View, ViewProps } from 'react-native';
 import { FlatList } from 'react-native';
 import { M_ReviewCard } from '../molecules/ReviewCard';
 
@@ -14,8 +14,6 @@ interface Review {
 interface ReviewsSectionProps extends ViewProps {
   reviews: Review[];
 }
-
-const { width } = Dimensions.get('screen');
 
 export const O_ReviewsSection: React.FC<ReviewsSectionProps> = ({
   reviews,

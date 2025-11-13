@@ -4,7 +4,6 @@ import { Image as ExpoImage } from 'expo-image';
 import { cssInterop } from 'nativewind';
 
 cssInterop(ExpoImage, { className: 'style' });
-import { COLORS } from '../../constants/colors';
 
 interface HeaderProps {
   notificationCount?: number;
