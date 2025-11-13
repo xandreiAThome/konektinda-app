@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { router } from 'expo-router';
 import { LoginTemplate } from '../../features/auth/components/template/LoginTemplate';
 import { useLoginForm } from '../../features/auth/hooks/useAuthForm';
-import { loginWithEmail } from '../../features/auth/services';
+import { loginWithEmail, saveUserBackend } from '../../features/auth/services';
 import { useAlert } from '../../hooks/useAlert';
+import { useAuthStore } from '../../features/auth/hooks/useAuthStore';
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { showAlert } = useAlert();
+  const { setUser } = useAuthStore();
 
   // Use react-hook-form with zod validation
   const {
@@ -24,7 +26,18 @@ export default function LoginPage() {
       // Firebase authentication
       const result = await loginWithEmail(data.email, data.password);
 
-      if (result.success) {
+      if (result.success && result.user) {
+        // Save user to auth store
+        setUser(result.user);
+        try {
+          const idToken = await result.user.getIdToken();
+          await saveUserBackend(idToken);
+          console.log('✅ User saved to backend');
+        } catch (backendError) {
+          console.warn('⚠️ Failed to save user to backend:', backendError);
+          // Continue anyway - user is authenticated in Firebase
+        }
+
         showAlert({
           title: 'Login Success',
           message: `Welcome back, ${data.email}!`,

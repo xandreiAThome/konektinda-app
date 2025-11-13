@@ -90,3 +90,19 @@ function mapFirebaseError(code: string): string {
 
   return errorMap[code] || 'An unexpected error occurred. Please try again.';
 }
+
+export async function saveUserBackend(idToken: string) {
+  const res = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/google`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ idToken: idToken }),
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to save user to backend');
+  }
+
+  return res.json();
+}

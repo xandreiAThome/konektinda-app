@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { router } from 'expo-router';
 import { SignupTemplate } from '../../features/auth/components/template/SignupTemplate';
 import { useSignupForm } from '../../features/auth/hooks/useAuthForm';
-import { signupWithEmail } from '../../features/auth/services';
+import { signupWithEmail, saveUserBackend } from '../../features/auth/services';
 import { SignupFormData } from '../../features/auth/schemas';
 import { useAlert } from '../../hooks/useAlert';
+import { useAuthStore } from '../../features/auth/hooks/useAuthStore';
 
 export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const { showAlert } = useAlert();
+  const { setUser } = useAuthStore();
 
   // Use react-hook-form with zod validation
   const {
@@ -25,7 +27,20 @@ export default function SignupPage() {
       // Firebase authentication
       const result = await signupWithEmail(data.email, data.password);
 
-      if (result.success) {
+      if (result.success && result.user) {
+        // Save user to auth store
+        setUser(result.user);
+
+        // Save user to backend
+        try {
+          const idToken = await result.user.getIdToken();
+          await saveUserBackend(idToken);
+          console.log('✅ User saved to backend');
+        } catch (backendError) {
+          console.warn('⚠️ Failed to save user to backend:', backendError);
+          // Continue anyway - user is authenticated in Firebase
+        }
+
         showAlert({
           title: 'Account Created',
           message: `Welcome, ${data.email}!`,
