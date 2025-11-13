@@ -43,5 +43,15 @@ jobs:
           wait-on: 'http://localhost:8081'
           browser: chrome
 
+      - name: Upload Cypress Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+          retention-days: 30
+
       - name: Run linter
         run: npm run lint
