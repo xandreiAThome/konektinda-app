@@ -37,17 +37,6 @@ export default function LoginPage() {
           console.warn('⚠️ Failed to save user to backend:', backendError);
           // Continue anyway - user is authenticated in Firebase
         }
-
-        showAlert({
-          title: 'Login Success',
-          message: `Welcome back, ${data.email}!`,
-          buttons: [
-            {
-              text: 'OK',
-              onPress: () => router.replace('/(app)/(customer)/(tabs)'),
-            },
-          ],
-        });
       } else {
         showAlert({
           title: 'Login Error',

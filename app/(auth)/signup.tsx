@@ -40,17 +40,6 @@ export default function SignupPage() {
           console.warn('⚠️ Failed to save user to backend:', backendError);
           // Continue anyway - user is authenticated in Firebase
         }
-
-        showAlert({
-          title: 'Account Created',
-          message: `Welcome, ${data.email}!`,
-          buttons: [
-            {
-              text: 'OK',
-              onPress: () => router.replace('/(app)/(customer)/(tabs)'),
-            },
-          ],
-        });
       } else {
         showAlert({
           title: 'Signup Error',
