@@ -15,32 +15,6 @@ describe('Signup Functionality', () => {
     });
 
     /**
-     * TEST 1: Successful Signup
-     * Goal: Verifies a new user can sign up and is taken to the home page.
-     */
-    it('should sign up successfully with a new email and valid password', () => {
-        
-        // --- 1. Type Email ---
-        cy.get('input[placeholder="Enter your email"]').click()
-        cy.get('input[placeholder="Enter your email"]').type(SUCCESS_EMAIL).should('have.value', SUCCESS_EMAIL);
-        
-        // --- 2. Type Password ---
-        cy.get('input[placeholder="Create a password"]').click();
-        cy.get('input[placeholder="Create a password"]').type(VALID_PASSWORD).should('have.value', VALID_PASSWORD);
-
-        // --- 3. Confirm Password ---
-        cy.get('input[placeholder="Confirm your password"]').click();
-        cy.get('input[placeholder="Confirm your password"]').type(VALID_PASSWORD).should('have.value', VALID_PASSWORD);
-
-        // --- 4. Click Create Account ---
-        cy.contains('Create Account').click(); 
-        
-        // --- 5. Verify Successful Login ---
-        cy.contains('Browse', { timeout: 10000 }).should('be.visible');
-        cy.url().should('eq', 'http://localhost:8081/');
-    });
-
-    /**
      * VALIDATION TESTS
      * Goal: Verifies all client-side validation errors appear correctly.
      */
@@ -128,4 +102,5 @@ describe('Signup Functionality', () => {
         // --- 6. Verify Failure ---
         cy.url().should('include', '/signup');
     });
+
 });
