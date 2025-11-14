@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
   deliveryTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 15,
     color: AppColors.TextPrimary,
   },

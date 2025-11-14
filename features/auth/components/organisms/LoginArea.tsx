@@ -7,11 +7,13 @@ import { Text } from '@/components/ui/text';
 interface AuthOrganismLoginAreaProps {
   onLogin: (username: string, password: string) => void;
   onForgotPassword: () => void;
+  btnColor: string;
 }
 
 export const O_LoginArea: React.FC<AuthOrganismLoginAreaProps> = ({
   onLogin,
   onForgotPassword,
+  btnColor,
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -48,6 +50,7 @@ export const O_LoginArea: React.FC<AuthOrganismLoginAreaProps> = ({
 
       <Button
         variant="default"
+        style={{ backgroundColor: btnColor }}
         className="w-full rounded-md bg-[#ef4444] drop-shadow-md hover:bg-red-600"
         onPress={handleLoginPress}>
         <Text className="text-center text-base font-semibold text-white">Login</Text>

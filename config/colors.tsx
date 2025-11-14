@@ -25,6 +25,6 @@ export const AppColors = {
 
   TextPrimary: '#333333',
   TextSecondary: '#888888',
-  GrayLight: '#EEEEEE',
+  GrayLight: '9F9F9F',
   CardBackground: '#FFFFFF', // White background for the main card area
 };

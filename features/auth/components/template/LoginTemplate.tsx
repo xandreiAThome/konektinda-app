@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ViewProps, Image } from 'react-native';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
+import { Button } from '../../../../components/ui/button';
+import { Text } from '../../../../components/ui/text';
 import { O_LoginArea } from '../organisms/LoginArea';
 
 interface LoginTemplateProps extends ViewProps {
@@ -37,7 +37,11 @@ export const LoginTemplate: React.FC<LoginTemplateProps> = ({
 
         {/* 1. Login Form Area */}
         <View className="flex w-full max-w-sm items-center justify-center">
-          <O_LoginArea onLogin={onLogin} onForgotPassword={onForgotPassword} />
+          <O_LoginArea
+            onLogin={onLogin}
+            onForgotPassword={onForgotPassword}
+            btnColor={buttonColor}
+          />
         </View>
 
         {/* 2. Create Account Link */}
