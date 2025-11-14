@@ -72,14 +72,6 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
 
   return (
     <View style={[styles.container, { backgroundColor: themeColor }]}>
-      {/* Header Area (Logo, User Icon, Page Title) */}
-      <View style={styles.header}>
-        <A_Image source={KonektindaLogo} style={styles.logo} />
-        <Text style={styles.pageTitle}>
-          {`[${isCustomer ? 'CARINDERIA OWNER' : 'SUPPLIER'}] Delivery Page (${isDelivered ? 'Delivered' : 'Pending'})`}
-        </Text>
-      </View>
-
       {/* Main Content Card */}
       <View style={styles.contentCard}>
         <Text style={styles.deliveryTitle}>Deliveries</Text>
