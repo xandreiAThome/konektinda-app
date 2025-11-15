@@ -1,16 +1,23 @@
 ---
 name: Lint-Test Workflow
 
-on: 
-  push: 
+on:
+  push:
     branches: [main, staging, dev]
   pull_request:
     branches: [main, staging, dev]
 
 env:
-  NODE_ENV: production
-  # Use a secret for your API key
+  NODE_ENV: development
+  # Use secrets for API keys
   EXPO_PUBLIC_API_URL: ${{ secrets.EXPO_PUBLIC_API_URL }}
+  EXPO_PUBLIC_FIREBASE_AUTH_API_KEY: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_API_KEY }}
+  EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+  EXPO_PUBLIC_FIREBASE_AUTH_PROJECT_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_PROJECT_ID }}
+  EXPO_PUBLIC_FIREBASE_AUTH_APP_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_APP_ID }}
+  EXPO_PUBLIC_FIREBASE_AUTH_STORAGE_BUCKET: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_STORAGE_BUCKET }}
+  EXPO_PUBLIC_FIREBASE_AUTH_MESSAGING_SENDER_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_MESSAGING_SENDER_ID }}
+  EXPO_PUBLIC_FIREBASE_AUTH_MEASUREMENT_ID: ${{ secrets.EXPO_PUBLIC_FIREBASE_AUTH_MEASUREMENT_ID }}
 
 jobs:
   lint-test:
@@ -35,6 +42,16 @@ jobs:
           start: npx expo serve
           wait-on: 'http://localhost:8081'
           browser: chrome
+
+      - name: Upload Cypress Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+          retention-days: 30
 
       - name: Run linter
         run: npm run lint

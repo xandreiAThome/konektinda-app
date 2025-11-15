@@ -21,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handlePress = () => {
     router.push({
-      pathname: '/(tabs)/product',
+      pathname: '/(app)/(customer)/(tabs)/product',
       params: {
         product_id: String(product.product_id),
       },

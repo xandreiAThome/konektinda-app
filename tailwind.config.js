@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line no-unused-vars
 const { fontFamily } = require('tailwindcss/defaultTheme');
 const { hairlineWidth } = require('nativewind/theme');
 

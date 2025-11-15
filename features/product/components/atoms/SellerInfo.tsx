@@ -1,6 +1,10 @@
 import React from 'react';
-import { View, ViewProps, ImageSourcePropType, Image } from 'react-native';
+import { View, ViewProps, ImageSourcePropType } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
 import { Text } from '@/components/ui/text';
+
+cssInterop(ExpoImage, { className: 'style' });
 
 interface SellerInfoProps extends ViewProps {
   sellerImage: ImageSourcePropType;
@@ -19,7 +23,7 @@ export const A_SellerInfo: React.FC<SellerInfoProps> = ({
     <View
       className={`my-4 flex-row items-center justify-center gap-3 text-black ${className}`}
       {...viewProps}>
-      <Image source={sellerImage} className="h-10 w-10" />
+      <ExpoImage source={sellerImage} className="h-10 w-10" />
       <View>
         <Text className="text-sm font-semibold text-black">Distributed by {sellerName}</Text>
         <Text className="text-xs text-gray-600">Product listed on {listingDate}</Text>

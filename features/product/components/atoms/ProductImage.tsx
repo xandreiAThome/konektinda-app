@@ -1,5 +1,9 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
+
+cssInterop(ExpoImage, { className: 'style' });
 
 interface ProductImageProps {
   source: any;
@@ -16,13 +20,13 @@ export const A_ProductImage: React.FC<ProductImageProps> = ({
 }) => {
   return (
     <View className={`items-center justify-center ${containerClassName}`}>
-      <Image
+      <ExpoImage
         source={source}
         style={{
           width,
           height,
-          resizeMode: 'contain',
         }}
+        contentFit="contain"
       />
     </View>
   );
