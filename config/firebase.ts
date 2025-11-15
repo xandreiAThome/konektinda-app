@@ -20,3 +20,12 @@ const auth = initializeAuth(app, {
 });
 
 export { app, auth, getAuth };
+
+// for proper auth persistance
+// const app = initializeApp(firebaseConfig);
+
+// // Get auth instance
+// // Firebase automatically uses persistent storage by default
+// const auth = getAuth(app);
+
+// export { app, auth, getAuth };

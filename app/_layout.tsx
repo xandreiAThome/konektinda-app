@@ -33,26 +33,26 @@ function ProtectedLayout() {
 }
 
 export default function RootLayout() {
-  // 3. Get state and setters from the store
+  // Get state and setters from the store
   const { initializing, setInitializing, setUser } = useAuthStore();
 
-  // 4. Set up the auth listener
+  // Set up the auth listener
   useEffect(() => {
-    // This effect runs once on mount
+    // Firebase will check its persisted session automatically
+    // This listener will fire with the persisted user if one exists
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setInitializing(false);
     });
 
-    // Cleanup the subscription on unmount
     return () => unsubscribe();
-  }, [setUser, setInitializing]); // Dependencies are stable setters
+  }, [setUser, setInitializing]);
 
-  // 5. Render loading or the app
+  // Render loading while initializing
   if (initializing) {
     return <LoadingScreen />;
   }
 
-  // 6. Once initialized, render the ProtectedLayout
+  // Once initialized, render the ProtectedLayout
   return <ProtectedLayout />;
 }
