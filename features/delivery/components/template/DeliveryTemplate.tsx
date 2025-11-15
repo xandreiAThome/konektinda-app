@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { AppColors } from '../../../../config/colors';
 import { A_Image } from '../atoms/Image';
 import { M_DeliveryCard } from '../molecules/DeliveryCard';
+import { ImageBackground } from 'expo-image';
 
 const KonektindaLogo = require('../../../../assets/images/KonekTinda_Logo.png');
 const UserAvatar = require('../../../../assets/images/avatar_user.png');
@@ -52,9 +53,9 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
   const themeColor = isCustomer ? AppColors.CustomerBackground : AppColors.SupplierBackground;
   const isDelivered = pageState === 'delivered';
 
-  const renderSection = (title: string, data: typeof mockData) => (
+  const renderSection = (title: string, data: typeof mockData, sectionColor: string) => (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+      <Text style={[styles.sectionTitle, { backgroundColor: sectionColor }]}>{title}</Text>
       {data.map((item) => (
         <M_DeliveryCard
           key={item.id}
@@ -84,7 +85,7 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
             <Text
               style={[
                 styles.topTabText,
-                { color: isDelivered ? AppColors.TextPrimary : AppColors.TextSecondary },
+                { color: isDelivered ? AppColors.ActiveTabText : AppColors.NonActiveTabText },
               ]}>
               Delivered
             </Text>
@@ -95,7 +96,7 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
             <Text
               style={[
                 styles.topTabText,
-                { color: !isDelivered ? AppColors.TextPrimary : AppColors.TextSecondary },
+                { color: !isDelivered ? AppColors.ActiveTabText : AppColors.NonActiveTabText },
               ]}>
               Pending
             </Text>
@@ -109,15 +110,18 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
             <>
               {renderSection(
                 'Incoming',
-                mockData.filter((d) => d.status === 'Incoming')
+                mockData.filter((d) => d.status === 'Incoming'),
+                AppColors.StatusIncoming
               )}
               {renderSection(
                 'Processing',
-                mockData.filter((d) => d.status === 'Processing')
+                mockData.filter((d) => d.status === 'Processing'),
+                AppColors.StatusProcessing
               )}
               {renderSection(
                 'Delayed/Cancelled',
-                mockData.filter((d) => d.status === 'Delayed')
+                mockData.filter((d) => d.status === 'Delayed'),
+                AppColors.StatusDelayed
               )}
             </>
           )}
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
   contentCard: {
     flex: 1,
     width: '100%',
-    backgroundColor: AppColors.CardBackground,
+    backgroundColor: AppColors.White,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
@@ -163,29 +167,33 @@ const styles = StyleSheet.create({
   deliveryTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+    fontStyle: 'italic',
     textAlign: 'center',
     marginBottom: 15,
-    color: AppColors.TextPrimary,
+    color: AppColors.TitleDelivery,
   },
   topTabs: {
     flexDirection: 'row',
     backgroundColor: AppColors.GrayLight,
     borderRadius: 20,
     marginBottom: 20,
+    columnGap: 10,
   },
   topTab: {
+    backgroundColor: AppColors.TopTabInactive,
     flex: 1,
     alignItems: 'center',
     paddingVertical: 10,
-    borderRadius: 20,
+    borderRadius: 10,
+
+    shadowColor: AppColors.Black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5, //for Android
   },
   topTabActive: {
-    backgroundColor: AppColors.White,
-    shadowColor: AppColors.Black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 5,
+    backgroundColor: AppColors.TopTabActive,
   },
   topTabText: {
     fontWeight: 'bold',
@@ -199,7 +207,13 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    paddingVertical: 10,
-    color: AppColors.TextPrimary,
+    color: AppColors.StatusText,
+
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginTop: 10,
+    marginBottom: 11,
   },
 });

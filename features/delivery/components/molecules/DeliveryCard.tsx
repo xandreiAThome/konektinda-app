@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { AppColors } from '../../../../config/colors';
 
 interface DeliveryCardProps {
@@ -53,10 +53,16 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: AppColors.CardBackground,
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 21,
     marginBottom: 10,
     borderWidth: 1,
     borderColor: AppColors.GrayLight,
+
+    shadowColor: AppColors.Black,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5, //for android
   },
   header: {
     flexDirection: 'row',
