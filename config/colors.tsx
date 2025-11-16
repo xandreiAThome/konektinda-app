@@ -21,6 +21,7 @@ export const AppColors = {
   StatusProcessing: '#EB8255', // Orange for Processing
   StatusDelayed: '#EB5555', // Light Red for Delayed/Cancelled
   StatusPending: '#66BB6A', // Another green shade for pending tab
+  StatusDelivered: '#1c563fff',
   StatusText: '#FFFFFF',
 
   TextPrimary: '1E1E1E',
@@ -34,4 +35,5 @@ export const AppColors = {
   TopTabInactive: '#9F9F9F',
   TopTabActive: '#EB5555',
   Shadow: '#000000',
+  CardText: '#EB5555',
 };

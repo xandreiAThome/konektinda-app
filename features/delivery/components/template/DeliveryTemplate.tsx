@@ -1,40 +1,138 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { AppColors } from '../../../../config/colors';
-import { A_Image } from '../atoms/Image';
 import { M_DeliveryCard } from '../molecules/DeliveryCard';
-import { ImageBackground } from 'expo-image';
-
-const KonektindaLogo = require('../../../../assets/images/KonekTinda_Logo.png');
-const UserAvatar = require('../../../../assets/images/avatar_user.png');
 
 const mockData = [
   {
-    id: 1,
-    name: 'Product A',
-    price: 200,
+    id: 12,
+    name: 'Product K',
+    quantity: 4,
+    unitPrice: 21.36,
     status: 'Incoming',
     statusColor: AppColors.StatusIncoming,
-    date: '10:00 AM',
-    action: 'arrow-right' as const,
+    rightText: '2.2Km',
+    action: 'truck' as const,
+  },
+  {
+    id: 1,
+    name: 'Product A',
+    quantity: 4,
+    unitPrice: 200.366,
+    status: 'Incoming',
+    statusColor: AppColors.StatusIncoming,
+    rightText: '12.3Km',
+    action: 'truck' as const,
+  },
+  {
+    id: 13,
+    name: 'Product L',
+    quantity: 4,
+    unitPrice: 173.32,
+    status: 'Processing',
+    statusColor: AppColors.StatusProcessing,
+    rightText: 'Preparing at [Factory B]',
+    action: 'process' as const,
   },
   {
     id: 2,
     name: 'Product B',
-    price: 300,
+    quantity: 2,
+    unitPrice: 300,
     status: 'Processing',
     statusColor: AppColors.StatusProcessing,
-    date: 'Yesterday',
-    action: 'arrow-right' as const,
+    rightText: 'Preparing at [Factory A]',
+    action: 'process' as const,
   },
   {
     id: 3,
     name: 'Product C',
-    price: 100,
+    quantity: 1,
+    unitPrice: 100,
     status: 'Delayed',
     statusColor: AppColors.StatusDelayed,
-    date: '1 week ago',
-    action: 'close' as const,
+    rightText: 'Delayed',
+    action: 'delay' as const,
+  },
+  {
+    id: 4,
+    name: 'Product D',
+    quantity: 12,
+    unitPrice: 332.442,
+    status: 'Cancelled',
+    statusColor: AppColors.StatusDelayed,
+    rightText: 'Cancelled',
+    action: 'cancel' as const,
+  },
+  {
+    id: 5,
+    name: 'Product E',
+    quantity: 7,
+    unitPrice: 5,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/12/2025 3:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 6,
+    name: 'Product F',
+    quantity: 72,
+    unitPrice: 21,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/4/2025 2:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 7,
+    name: 'Product G',
+    quantity: 1,
+    unitPrice: 60,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/2/2025 3:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 8,
+    name: 'Product H',
+    quantity: 25,
+    unitPrice: 2,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/2/2025 10:23am',
+    action: 'check' as const,
+  },
+  {
+    id: 9,
+    name: 'Product I',
+    quantity: 2,
+    unitPrice: 34,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Oct/24/2025 11:43am',
+    action: 'check' as const,
+  },
+  {
+    id: 10,
+    name: 'Product J',
+    quantity: 3,
+    unitPrice: 37,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Oct/23/2025 3:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 11,
+    name: 'Product K',
+    quantity: 4,
+    unitPrice: 21,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Oct/21/2025 2:22pm',
+    action: 'check' as const,
   },
 ];
 
@@ -53,23 +151,43 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
   const themeColor = isCustomer ? AppColors.CustomerBackground : AppColors.SupplierBackground;
   const isDelivered = pageState === 'delivered';
 
-  const renderSection = (title: string, data: typeof mockData, sectionColor: string) => (
-    <View style={styles.section}>
-      <Text style={[styles.sectionTitle, { backgroundColor: sectionColor }]}>{title}</Text>
-      {data.map((item) => (
-        <M_DeliveryCard
-          key={item.id}
-          productName={item.name}
-          size="(500mL)"
-          price={item.price}
-          statusText={item.status}
-          statusColor={item.statusColor}
-          dateText={item.date}
-          actionIconName={item.action}
-        />
-      ))}
-    </View>
-  );
+  const renderSection = (title: string, data: typeof mockData, sectionColor: string) => {
+    // 🔑 FIX: Add conditional return for empty data
+    if (data.length === 0) {
+      return (
+        <View style={styles.section} key={title}>
+          {/* Section title/pill */}
+          {title !== 'Delivered' && (
+            <Text style={[styles.sectionTitle, { backgroundColor: sectionColor }]}>{title}</Text>
+          )}
+
+          {/* Message for empty state */}
+          <Text style={styles.emptyMessageText}>No {title.toLowerCase()} items available.</Text>
+        </View>
+      );
+    }
+
+    // Original rendering logic for non-empty data
+    return (
+      <View style={styles.section} key={title}>
+        {title !== 'Delivered' && (
+          <Text style={[styles.sectionTitle, { backgroundColor: sectionColor }]}>{title}</Text>
+        )}
+        {data.map((item) => (
+          <M_DeliveryCard
+            key={item.id}
+            productName={item.name}
+            quantity={item.quantity}
+            unitPrice={item.unitPrice}
+            statusText={item.status}
+            statusColor={item.statusColor}
+            rightText={item.rightText}
+            actionIconName={item.action}
+          />
+        ))}
+      </View>
+    );
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: themeColor }]}>
@@ -109,6 +227,15 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
           {isDelivered && (
             <>
               {renderSection(
+                'Delivered',
+                mockData.filter((d) => d.status === 'Delivered'),
+                AppColors.StatusIncoming
+              )}
+            </>
+          )}
+          {!isDelivered && (
+            <>
+              {renderSection(
                 'Incoming',
                 mockData.filter((d) => d.status === 'Incoming'),
                 AppColors.StatusIncoming
@@ -120,13 +247,10 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
               )}
               {renderSection(
                 'Delayed/Cancelled',
-                mockData.filter((d) => d.status === 'Delayed'),
+                mockData.filter((d) => ['Delayed', 'Cancelled'].includes(d.status)),
                 AppColors.StatusDelayed
               )}
             </>
-          )}
-          {!isDelivered && (
-            <Text style={{ textAlign: 'center', marginTop: 20 }}>No pending deliveries found.</Text>
           )}
         </ScrollView>
       </View>
@@ -215,5 +339,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 10,
     marginBottom: 11,
+  },
+  emptyMessageText: {
+    textAlign: 'center',
+    marginTop: 15,
+    fontSize: 16,
+    color: AppColors.TextSecondary,
   },
 });
