@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, FlatList, Pressable, Image } from 'react-native';
+import { View, FlatList, Pressable } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
+import { cssInterop } from 'nativewind';
 import { useRouter } from 'expo-router';
 import { A_SellerInfo } from '../atoms/SellerInfo';
 import { M_AddToCartButton } from '../atoms/AddToCartButton';
 import { O_ReviewsSection } from '../organisms/ReviewsSection';
 import { Text } from '@/components/ui/text';
-import { Alert } from 'react-native';
+import { useAlert } from '@/hooks/useAlert';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
+cssInterop(ExpoImage, { className: 'style' });
 
 interface Review {
   id: string;
@@ -43,16 +46,20 @@ const TEMP_REVIEWS: Review[] = [
 // Component for displaying product content
 export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
+  const { showAlert } = useAlert();
 
   // Fetch product data from API
   const { data: product, isLoading, isError } = useProductById(product_id || '');
 
   const handleBackPress = () => {
-    router.push('/(tabs)/listing');
+    router.push('/(app)/(customer)/(tabs)/listing');
   };
 
   const handleAddToCart = () => {
-    Alert.alert('Success', 'Product added to cart!');
+    showAlert({
+      title: 'Success',
+      message: 'Product added to cart!',
+    });
   };
 
   if (isLoading) {
@@ -84,10 +91,10 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
 
           {/* Product Image */}
           <View className="items-center justify-center py-6">
-            <Image
+            <ExpoImage
               source={require('@/assets/images/temp_image.png')}
               className="h-40 w-72"
-              style={{ resizeMode: 'contain' }}
+              contentFit="contain"
             />
           </View>
 

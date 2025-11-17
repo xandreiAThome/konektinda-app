@@ -1,47 +1,64 @@
-import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import { Button } from '@/components/ui/button';
 import { M_FormField } from '../molecules/FormField';
 import { Text } from '@/components/ui/text';
+import { Controller } from 'react-hook-form';
 
 interface AuthOrganismLoginAreaProps {
-  onLogin: (username: string, password: string) => void;
+  onLogin: (_email: string, _password: string) => void;
   onForgotPassword: () => void;
-  btnColor: string;
+  control: any;
+  errors: any;
+  isLoading?: boolean;
 }
 
 export const O_LoginArea: React.FC<AuthOrganismLoginAreaProps> = ({
   onLogin,
   onForgotPassword,
-  btnColor,
+  control,
+  errors,
+  isLoading = false,
 }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLoginPress = () => {
-    if (!username || !password) {
-      Alert.alert('Login Error', 'Please enter both username and password.');
-      return;
-    }
-    onLogin(username, password);
-  };
-
   return (
     <View className="w-full items-center">
-      <M_FormField
-        label="Username"
-        placeholder="Enter your username"
-        onChangeText={setUsername}
-        value={username}
-        autoCapitalize="none"
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <View className="w-full">
+            <M_FormField
+              label="Email"
+              placeholder="Enter your email"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            {errors?.email && <Text className="text-xs text-red-500">{errors.email.message}</Text>}
+          </View>
+        )}
       />
 
-      <M_FormField
-        label="Password"
-        placeholder="Enter your password"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <View className="w-full">
+            <M_FormField
+              label="Password"
+              placeholder="Enter your password"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              secureTextEntry
+            />
+            {errors?.password && (
+              <Text className="text-xs text-red-500">{errors.password.message}</Text>
+            )}
+          </View>
+        )}
       />
 
       <Button variant="link" className="mb-4 self-end px-2" onPress={onForgotPassword}>
@@ -50,10 +67,12 @@ export const O_LoginArea: React.FC<AuthOrganismLoginAreaProps> = ({
 
       <Button
         variant="default"
-        style={{ backgroundColor: btnColor }}
         className="w-full rounded-md bg-[#ef4444] drop-shadow-md hover:bg-red-600"
-        onPress={handleLoginPress}>
-        <Text className="text-center text-base font-semibold text-white">Login</Text>
+        onPress={() => onLogin('', '')}
+        disabled={isLoading}>
+        <Text className="text-center text-base font-semibold text-white">
+          {isLoading ? 'Logging in...' : 'Login'}
+        </Text>
       </Button>
     </View>
   );
