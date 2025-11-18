@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { AppColors } from '../../../../config/colors';
 import { M_DeliveryCard } from '../molecules/DeliveryCard';
 
@@ -151,27 +151,44 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
   const themeColor = isCustomer ? AppColors.CustomerBackground : AppColors.SupplierBackground;
   const isDelivered = pageState === 'delivered';
 
-  const renderSection = (title: string, data: typeof mockData, sectionColor: string) => {
-    // 🔑 FIX: Add conditional return for empty data
+  const renderSection = (title: string, data: typeof mockData) => {
+    // Original rendering logic
+    let bgClass = '';
+    let textColorClass = 'text-white';
+    if (title === 'Incoming' || title === 'Delivered') {
+      bgClass = 'bg-[#3C7F64]'; // Must be a defined Tailwind/NativeWind class
+    } else if (title === 'Processing') {
+      bgClass = 'bg-[#EB8255]';
+    } else if (title === 'Delayed/Cancelled') {
+      bgClass = 'bg-[#EB5555]';
+    }
+
     if (data.length === 0) {
       return (
-        <View style={styles.section} key={title}>
+        <View className="mb-2.5" key={title}>
           {/* Section title/pill */}
           {title !== 'Delivered' && (
-            <Text style={[styles.sectionTitle, { backgroundColor: sectionColor }]}>{title}</Text>
+            <Text
+              className={`${bgClass} ${textColorClass} mb-3 mt-2.5 flex-row self-start rounded-xl px-2 py-1 text-sm font-bold`}>
+              {title}
+            </Text>
           )}
 
           {/* Message for empty state */}
-          <Text style={styles.emptyMessageText}>No {title.toLowerCase()} items available.</Text>
+          <Text className="mt-3.5 text-center text-base text-gray-500">
+            No {title.toLowerCase()} items available.
+          </Text>
         </View>
       );
     }
 
-    // Original rendering logic for non-empty data
     return (
-      <View style={styles.section} key={title}>
+      <View className="mb-2.5 gap-y-[10]" key={title}>
         {title !== 'Delivered' && (
-          <Text style={[styles.sectionTitle, { backgroundColor: sectionColor }]}>{title}</Text>
+          <Text
+            className={`${bgClass} ${textColorClass} mb-3 mt-2.5 flex-row self-start rounded-xl px-2 py-1 text-sm font-bold`}>
+            {title}
+          </Text>
         )}
         {data.map((item) => (
           <M_DeliveryCard
@@ -190,46 +207,37 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColor }]}>
+    <View className="flex-1 items-center">
       {/* Main Content Card */}
-      <View style={styles.contentCard}>
-        <Text style={styles.deliveryTitle}>Deliveries</Text>
+      <View className="w-full flex-1 rounded-tl-[30px] rounded-tr-[30px] bg-white px-5 pb-5 pt-5">
+        <Text className="mb-4 text-center text-2xl font-bold italic">Deliveries</Text>
 
         {/* Delivered / Pending Tabs */}
-        <View style={styles.topTabs}>
+        <View className="mb-5 flex-row gap-x-[10] rounded-xl p-1">
           <TouchableOpacity
-            style={[styles.topTab, isDelivered && styles.topTabActive]}
+            className={`flex-1 items-center rounded-lg py-2 ${isDelivered ? 'elevation-4 bg-[#EB5555] shadow-lg' : 'bg-[#9F9F9F]'}`}
             onPress={() => setPageState('delivered')}>
-            <Text
-              style={[
-                styles.topTabText,
-                { color: isDelivered ? AppColors.ActiveTabText : AppColors.NonActiveTabText },
-              ]}>
+            <Text className={`${isDelivered ? 'font-bold text-white' : 'text-[#616161]'}`}>
               Delivered
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.topTab, !isDelivered && styles.topTabActive]}
+            className={`flex-1 items-center rounded-lg py-2 ${!isDelivered ? 'elevation-4 bg-[#EB5555] shadow-lg' : 'bg-[#9F9F9F]'}`}
             onPress={() => setPageState('pending')}>
-            <Text
-              style={[
-                styles.topTabText,
-                { color: !isDelivered ? AppColors.ActiveTabText : AppColors.NonActiveTabText },
-              ]}>
+            <Text className={`${!isDelivered ? 'font-bold text-white' : 'text-[#616161]'}`}>
               Pending
             </Text>
           </TouchableOpacity>
         </View>
 
         {/* Scrollable Delivery List */}
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
           {/* Render different sections based on state */}
           {isDelivered && (
             <>
               {renderSection(
                 'Delivered',
-                mockData.filter((d) => d.status === 'Delivered'),
-                AppColors.StatusIncoming
+                mockData.filter((d) => d.status === 'Delivered')
               )}
             </>
           )}
@@ -237,18 +245,15 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
             <>
               {renderSection(
                 'Incoming',
-                mockData.filter((d) => d.status === 'Incoming'),
-                AppColors.StatusIncoming
+                mockData.filter((d) => d.status === 'Incoming')
               )}
               {renderSection(
                 'Processing',
-                mockData.filter((d) => d.status === 'Processing'),
-                AppColors.StatusProcessing
+                mockData.filter((d) => d.status === 'Processing')
               )}
               {renderSection(
                 'Delayed/Cancelled',
-                mockData.filter((d) => ['Delayed', 'Cancelled'].includes(d.status)),
-                AppColors.StatusDelayed
+                mockData.filter((d) => ['Delayed', 'Cancelled'].includes(d.status))
               )}
             </>
           )}
@@ -257,93 +262,3 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  header: {
-    width: '100%',
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 120, // Fixed height for header area
-  },
-  logo: {
-    width: 150,
-    height: 50,
-  },
-  pageTitle: {
-    color: AppColors.White,
-    fontSize: 12,
-  },
-  contentCard: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: AppColors.White,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 20,
-  },
-  deliveryTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontStyle: 'italic',
-    textAlign: 'center',
-    marginBottom: 15,
-    color: AppColors.TitleDelivery,
-  },
-  topTabs: {
-    flexDirection: 'row',
-    backgroundColor: AppColors.GrayLight,
-    borderRadius: 20,
-    marginBottom: 20,
-    columnGap: 10,
-  },
-  topTab: {
-    backgroundColor: AppColors.TopTabInactive,
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderRadius: 10,
-
-    shadowColor: AppColors.Black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5, //for Android
-  },
-  topTabActive: {
-    backgroundColor: AppColors.TopTabActive,
-  },
-  topTabText: {
-    fontWeight: 'bold',
-  },
-  scrollViewContent: {
-    paddingBottom: 20,
-  },
-  section: {
-    marginBottom: 10,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: AppColors.StatusText,
-
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginTop: 10,
-    marginBottom: 11,
-  },
-  emptyMessageText: {
-    textAlign: 'center',
-    marginTop: 15,
-    fontSize: 16,
-    color: AppColors.TextSecondary,
-  },
-});
