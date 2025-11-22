@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
+import { Image as ExpoImage } from 'expo-image';
 import { Feather, MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
 
 const IconPlaceholder = require('../../../../assets/images/icon-placeholder.png');
@@ -44,7 +45,7 @@ export const M_DeliveryCard: React.FC<DeliveryCardProps> = ({
     <View className="elevation-5 mb-2.5 h-20 w-full flex-row items-center justify-between overflow-hidden rounded-[21px] border border-gray-200 bg-white p-2.5 shadow">
       {/* Left column: image placeholder (fixed length) */}
       <View className="mr-2.5 h-[60px] w-[60px] items-center justify-center rounded-[10px] bg-gray-200">
-        <Image source={IconPlaceholder} className="h-4/5 w-4/5" resizeMode="contain" />
+        <ExpoImage source={IconPlaceholder} className="h-4/5 w-4/5" contentFit="contain" />
       </View>
 
       {/* midlle column: product info (dynamic length) */}
