@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'; //for implementing shipping icon truck
 import { Image as ExpoImage } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { cssInterop } from 'nativewind';
@@ -64,6 +65,15 @@ export default function TabsLayout() {
         name="product"
         options={{
           href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="deliveries" //must match the file name deliveries.tsx
+        options={{
+          title: 'Deliveries',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="local-shipping" color={color} size={size} />
+          ),
         }}
       />
     </Tabs>
