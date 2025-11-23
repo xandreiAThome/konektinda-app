@@ -1,6 +1,6 @@
 describe('Catalog and Product Details Flow', () => {
-    const EMAIL = 'testuser@gmail.com';
-    const PASSWORD = 'Testing1';
+  const EMAIL = 'testuser@gmail.com';
+  const PASSWORD = 'Testing1';
 
   beforeEach(() => {
     cy.visit('/');
