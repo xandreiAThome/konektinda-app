@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // 1. Added useState
 import { View, FlatList, Pressable } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { cssInterop } from 'nativewind';
@@ -7,10 +7,11 @@ import { A_SellerInfo } from '../atoms/SellerInfo';
 import { M_AddToCartButton } from '../atoms/AddToCartButton';
 import { O_ReviewsSection } from '../organisms/ReviewsSection';
 import { Text } from '@/components/ui/text';
-import { useAlert } from '@/hooks/useAlert';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
+import { AddToCartSheet } from '../../../cart/components/organisms/addToCartSheet';
+
 cssInterop(ExpoImage, { className: 'style' });
 
 interface Review {
@@ -43,23 +44,19 @@ const TEMP_REVIEWS: Review[] = [
   },
 ];
 
-// Component for displaying product content
 export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
-  const { showAlert } = useAlert();
 
-  // Fetch product data from API
+  const [isCartSheetVisible, setIsCartSheetVisible] = useState(false);
+
   const { data: product, isLoading, isError } = useProductById(product_id || '');
 
   const handleBackPress = () => {
-    router.push('/(app)/(customer)/(tabs)/listing');
+    router.push('/listing');
   };
 
   const handleAddToCart = () => {
-    showAlert({
-      title: 'Success',
-      message: 'Product added to cart!',
-    });
+    setIsCartSheetVisible(true);
   };
 
   if (isLoading) {
@@ -74,11 +71,9 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
     );
   }
 
-  // Get first variant as the primary one
   const primaryVariant = product.variants?.[0];
   const category = product.category;
 
-  // Sections to render in the list
   const sections = [
     {
       id: 'header',
@@ -167,12 +162,21 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
   ];
 
   return (
-    <FlatList
-      data={sections}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => item.component}
-      className="flex-1 bg-white"
-      scrollEnabled={true}
-    />
+    <>
+      <FlatList
+        data={sections}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => item.component}
+        className="flex-1 bg-white"
+        scrollEnabled={true}
+      />
+
+      {/* 6. RENDER THE MODAL */}
+      <AddToCartSheet
+        visible={isCartSheetVisible}
+        onClose={() => setIsCartSheetVisible(false)}
+        product={product}
+      />
+    </>
   );
 };
