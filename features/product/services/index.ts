@@ -17,3 +17,39 @@ export async function fetchProductById(id: string) {
   }
   return res.json();
 }
+
+export async function addCart(variant_id: string, token: string) {
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/cart/items/${variant_id}`;
+  console.debug('[addCart] POST', url);
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      variant_id: variant_id,
+      quantity: 1,
+    }),
+  });
+  const raw = await res.text().catch(() => '');
+  let data;
+  try {
+    data = raw ? JSON.parse(raw) : {};
+  } catch {
+    data = { raw };
+  }
+
+  console.debug('[addCart] response status:', res.status, 'body:', data);
+
+  if (!res.ok) {
+    const message = (data && (data.message || data.error)) || raw || 'Failed to add product';
+    const error = new Error(message);
+    // @ts-ignore
+    error.status = res.status;
+    throw error;
+  }
+
+  return { ...(data || {}), _statusCode: res.status };
+}

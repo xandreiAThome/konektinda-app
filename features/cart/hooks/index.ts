@@ -1,34 +1,22 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { addItemToCart, fetchCartItems, updateCartItem } from '../services';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetchCartProducts } from '../services/index';
+import { useAuthStore } from '../../auth/hooks/useAuthStore';
 
-export function useCartItems() {
+export const QUERY_KEYS = {
+  cart: () => ['cart'],
+} as const;
+
+export function useCartAll() {
+  const user = useAuthStore((state) => state.user);
   return useQuery({
-    queryKey: ['cart'],
-    queryFn: fetchCartItems,
-  });
-}
+    queryKey: QUERY_KEYS.cart(),
+    queryFn: async () => {
+      if (!user) throw new Error('No user logged in');
 
-export function useUpdateCartItem() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: updateCartItem,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      const token = await user.getIdToken();
+      return fetchCartProducts(token);
     },
-  });
-}
-
-export function useAddItemToCart() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: addItemToCart,
-    onSuccess: (data) => {
-      console.log('Item added to cart:', data);
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-    },
-    onError: (error) => {
-      console.error('Error adding item to cart:', error);
-    },
+    staleTime: 0,
+    gcTime: 0,
   });
 }
