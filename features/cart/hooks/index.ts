@@ -1,5 +1,26 @@
+import { fetchCartProducts } from '../services/index';
+import { useAuthStore } from '../../auth/hooks/useAuthStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { addItemToCart, fetchCartItems, updateCartItem } from '../services';
+
+export const QUERY_KEYS = {
+  cart: () => ['cart'],
+} as const;
+
+export function useCartAll() {
+  const user = useAuthStore((state) => state.user);
+  return useQuery({
+    queryKey: QUERY_KEYS.cart(),
+    queryFn: async () => {
+      if (!user) throw new Error('No user logged in');
+
+      const token = await user.getIdToken();
+      return fetchCartProducts(token);
+    },
+    staleTime: 0,
+    gcTime: 0,
+  });
+}
 
 export function useCartItems() {
   return useQuery({

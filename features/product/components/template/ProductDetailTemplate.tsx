@@ -107,7 +107,9 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
 
             {/* Variant Name */}
             {primaryVariant?.variant_name && (
-              <Text className="mt-1 text-sm text-gray-600">{primaryVariant.variant_name}</Text>
+              <Text className="mt-1 text-sm text-gray-600">
+                {primaryVariant.variant_name} sdasa {primaryVariant.product_variant_id}
+              </Text>
             )}
 
             {/* Price and Stock */}
