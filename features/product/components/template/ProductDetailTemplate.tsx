@@ -10,7 +10,7 @@ import { Text } from '@/components/ui/text';
 import { useAlert } from '@/hooks/useAlert';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
-import { useProductById, addToCart } from '../../hooks';
+import { useProductById, useAddToCart } from '../../hooks';
 cssInterop(ExpoImage, { className: 'style' });
 
 interface Review {
@@ -51,7 +51,7 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
   // Fetch product data from API
   const { data: product, isLoading, isError } = useProductById(product_id || '');
 
-  const { mutate: useAddToCart, isPending: isAdding } = addToCart();
+  const { mutate: addToCartMutate, isPending: isAdding } = useAddToCart();
 
   const handleBackPress = () => {
     router.push('/(app)/(customer)/(tabs)/listing');
@@ -68,7 +68,7 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
       return;
     }
 
-    useAddToCart(targetVariant.product_variant_id, {
+    addToCartMutate(targetVariant.product_variant_id, {
       onSuccess: (data: any) => {
         showAlert({
           title: 'Success',

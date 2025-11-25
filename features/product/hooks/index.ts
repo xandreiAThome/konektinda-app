@@ -26,7 +26,7 @@ export function useProductById(id: string) {
   });
 }
 
-export function addToCart() {
+export function useAddToCart() {
   const queryClient = useQueryClient();
 
   const user = useAuthStore((state) => state.user);
