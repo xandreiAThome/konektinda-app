@@ -1,5 +1,5 @@
 import { Post, User } from '../../types';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
 import { PostCard, SectionHeader, UserCard } from '../molecules';
 
 interface DataListProps {

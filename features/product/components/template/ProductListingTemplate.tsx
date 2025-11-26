@@ -4,7 +4,6 @@ import { Header } from '../organisms/header';
 import { SearchBar } from '../molecules/searchBar';
 import { SkeletonGrid } from '../molecules/skeletonGrid';
 import { ProductGrid } from '../organisms/productGrid';
-import { MOST_POPULAR_PRODUCTS, LAST_PURCHASED_PRODUCTS } from '../../constants/mockData';
 import { COLORS } from '../../constants/colors';
 import { useProductsAll } from '../../hooks';
 import { Text } from '@/components/ui/text';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { DeliveryTemplate } from '../../features/delivery/components/template/DeliveryTemplate';
+import { View } from 'react-native';
+import { DeliveryTemplate } from '@/features/delivery/components/template/DeliveryTemplate';
 
 export default function DeliveriesScreen() {
   const [pageState, setPageState] = useState<'delivered' | 'pending'>('pending');
@@ -12,15 +12,3 @@ export default function DeliveriesScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});

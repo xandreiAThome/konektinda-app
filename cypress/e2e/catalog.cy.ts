@@ -1,17 +1,17 @@
 describe('Catalog and Product Details Flow', () => {
-  const username = 'cypress_test_user';
-  const password = 'CypressTestPass123';
+  const EMAIL = 'testuser@gmail.com';
+  const PASSWORD = 'Testing1';
 
   beforeEach(() => {
     cy.visit('/');
 
     // 1. Type Username
-    cy.get('input[placeholder="Enter your username"]').click();
-    cy.get('input[placeholder="Enter your username"]').type(username);
+    cy.get('input[placeholder="Enter your email"]').click();
+    cy.get('input[placeholder="Enter your email"]').type(EMAIL);
 
     // 2. Type Password
     cy.get('input[placeholder="Enter your password"]').click();
-    cy.get('input[placeholder="Enter your password"]').type(password);
+    cy.get('input[placeholder="Enter your password"]').type(PASSWORD);
 
     // 3. Click Login
     cy.contains('Login').click();

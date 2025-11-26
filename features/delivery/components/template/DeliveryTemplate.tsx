@@ -1,39 +1,138 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { AppColors } from '../../../../config/colors';
-import { A_Image } from '../atoms/Image';
 import { M_DeliveryCard } from '../molecules/DeliveryCard';
-
-const KonektindaLogo = require('../../../../assets/images/KonekTinda_Logo.png');
-const UserAvatar = require('../../../../assets/images/avatar_user.png');
 
 const mockData = [
   {
-    id: 1,
-    name: 'Product A',
-    price: 200,
+    id: 12,
+    name: 'Product K',
+    quantity: 4,
+    unitPrice: 21.36,
     status: 'Incoming',
     statusColor: AppColors.StatusIncoming,
-    date: '10:00 AM',
-    action: 'arrow-right' as const,
+    rightText: '2.2Km',
+    action: 'truck' as const,
+  },
+  {
+    id: 1,
+    name: 'Product A',
+    quantity: 4,
+    unitPrice: 200.366,
+    status: 'Incoming',
+    statusColor: AppColors.StatusIncoming,
+    rightText: '12.3Km',
+    action: 'truck' as const,
+  },
+  {
+    id: 13,
+    name: 'Product L',
+    quantity: 4,
+    unitPrice: 173.32,
+    status: 'Processing',
+    statusColor: AppColors.StatusProcessing,
+    rightText: 'Preparing at [Factory B]',
+    action: 'process' as const,
   },
   {
     id: 2,
     name: 'Product B',
-    price: 300,
+    quantity: 2,
+    unitPrice: 300,
     status: 'Processing',
     statusColor: AppColors.StatusProcessing,
-    date: 'Yesterday',
-    action: 'arrow-right' as const,
+    rightText: 'Preparing at [Factory A]',
+    action: 'process' as const,
   },
   {
     id: 3,
     name: 'Product C',
-    price: 100,
+    quantity: 1,
+    unitPrice: 100,
     status: 'Delayed',
     statusColor: AppColors.StatusDelayed,
-    date: '1 week ago',
-    action: 'close' as const,
+    rightText: 'Delayed',
+    action: 'delay' as const,
+  },
+  {
+    id: 4,
+    name: 'Product D',
+    quantity: 12,
+    unitPrice: 332.442,
+    status: 'Cancelled',
+    statusColor: AppColors.StatusDelayed,
+    rightText: 'Cancelled',
+    action: 'cancel' as const,
+  },
+  {
+    id: 5,
+    name: 'Product E',
+    quantity: 7,
+    unitPrice: 5,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/12/2025 3:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 6,
+    name: 'Product F',
+    quantity: 72,
+    unitPrice: 21,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/4/2025 2:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 7,
+    name: 'Product G',
+    quantity: 1,
+    unitPrice: 60,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/2/2025 3:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 8,
+    name: 'Product H',
+    quantity: 25,
+    unitPrice: 2,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Nov/2/2025 10:23am',
+    action: 'check' as const,
+  },
+  {
+    id: 9,
+    name: 'Product I',
+    quantity: 2,
+    unitPrice: 34,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Oct/24/2025 11:43am',
+    action: 'check' as const,
+  },
+  {
+    id: 10,
+    name: 'Product J',
+    quantity: 3,
+    unitPrice: 37,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Oct/23/2025 3:21pm',
+    action: 'check' as const,
+  },
+  {
+    id: 11,
+    name: 'Product K',
+    quantity: 4,
+    unitPrice: 21,
+    status: 'Delivered',
+    statusColor: AppColors.StatusDelivered,
+    rightText: 'Oct/21/2025 2:22pm',
+    action: 'check' as const,
   },
 ];
 
@@ -52,68 +151,97 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
   const themeColor = isCustomer ? AppColors.CustomerBackground : AppColors.SupplierBackground;
   const isDelivered = pageState === 'delivered';
 
-  const renderSection = (title: string, data: typeof mockData) => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      {data.map((item) => (
-        <M_DeliveryCard
-          key={item.id}
-          productName={item.name}
-          size="(500mL)"
-          price={item.price}
-          statusText={item.status}
-          statusColor={item.statusColor}
-          dateText={item.date}
-          actionIconName={item.action}
-        />
-      ))}
-    </View>
-  );
+  const renderSection = (title: string, data: typeof mockData) => {
+    // Original rendering logic
+    let bgClass = '';
+    let textColorClass = 'text-white';
+    if (title === 'Incoming' || title === 'Delivered') {
+      bgClass = 'bg-[#3C7F64]'; // Must be a defined Tailwind/NativeWind class
+    } else if (title === 'Processing') {
+      bgClass = 'bg-[#EB8255]';
+    } else if (title === 'Delayed/Cancelled') {
+      bgClass = 'bg-[#EB5555]';
+    }
+
+    if (data.length === 0) {
+      return (
+        <View className="mb-2.5" key={title}>
+          {/* Section title/pill */}
+          {title !== 'Delivered' && (
+            <Text
+              className={`${bgClass} ${textColorClass} mb-3 mt-2.5 flex-row self-start rounded-xl px-2 py-1 text-sm font-bold`}>
+              {title}
+            </Text>
+          )}
+
+          {/* Message for empty state */}
+          <Text className="mt-3.5 text-center text-base text-gray-500">
+            No {title.toLowerCase()} items available.
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <View className="mb-2.5 gap-y-[10]" key={title}>
+        {title !== 'Delivered' && (
+          <Text
+            className={`${bgClass} ${textColorClass} mb-3 mt-2.5 flex-row self-start rounded-xl px-2 py-1 text-sm font-bold`}>
+            {title}
+          </Text>
+        )}
+        {data.map((item) => (
+          <M_DeliveryCard
+            key={item.id}
+            productName={item.name}
+            quantity={item.quantity}
+            unitPrice={item.unitPrice}
+            statusText={item.status}
+            statusColor={item.statusColor}
+            rightText={item.rightText}
+            actionIconName={item.action}
+          />
+        ))}
+      </View>
+    );
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: themeColor }]}>
-      {/* Header Area (Logo, User Icon, Page Title) */}
-      <View style={styles.header}>
-        <A_Image source={KonektindaLogo} style={styles.logo} />
-        <Text style={styles.pageTitle}>
-          {`[${isCustomer ? 'CARINDERIA OWNER' : 'SUPPLIER'}] Delivery Page (${isDelivered ? 'Delivered' : 'Pending'})`}
-        </Text>
-      </View>
-
+    <View className="flex-1 items-center">
       {/* Main Content Card */}
-      <View style={styles.contentCard}>
-        <Text style={styles.deliveryTitle}>Deliveries</Text>
+      <View className="w-full flex-1 rounded-tl-[30px] rounded-tr-[30px] bg-white px-5 pb-5 pt-5">
+        <Text className="mb-4 text-center text-2xl font-bold italic">Deliveries</Text>
 
         {/* Delivered / Pending Tabs */}
-        <View style={styles.topTabs}>
+        <View className="mb-5 flex-row gap-x-[10] rounded-xl p-1">
           <TouchableOpacity
-            style={[styles.topTab, isDelivered && styles.topTabActive]}
+            className={`flex-1 items-center rounded-lg py-2 ${isDelivered ? 'elevation-4 bg-[#EB5555] shadow-lg' : 'bg-[#9F9F9F]'}`}
             onPress={() => setPageState('delivered')}>
-            <Text
-              style={[
-                styles.topTabText,
-                { color: isDelivered ? AppColors.TextPrimary : AppColors.TextSecondary },
-              ]}>
+            <Text className={`${isDelivered ? 'font-bold text-white' : 'text-[#616161]'}`}>
               Delivered
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.topTab, !isDelivered && styles.topTabActive]}
+            className={`flex-1 items-center rounded-lg py-2 ${!isDelivered ? 'elevation-4 bg-[#EB5555] shadow-lg' : 'bg-[#9F9F9F]'}`}
             onPress={() => setPageState('pending')}>
-            <Text
-              style={[
-                styles.topTabText,
-                { color: !isDelivered ? AppColors.TextPrimary : AppColors.TextSecondary },
-              ]}>
+            <Text className={`${!isDelivered ? 'font-bold text-white' : 'text-[#616161]'}`}>
               Pending
             </Text>
           </TouchableOpacity>
         </View>
 
         {/* Scrollable Delivery List */}
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
           {/* Render different sections based on state */}
           {isDelivered && (
+            <>
+              {renderSection(
+                'Delivered',
+                mockData.filter((d) => d.status === 'Delivered')
+              )}
+            </>
+          )}
+          {!isDelivered && (
             <>
               {renderSection(
                 'Incoming',
@@ -125,88 +253,12 @@ export const DeliveryTemplate: React.FC<DeliveryTemplateProps> = ({
               )}
               {renderSection(
                 'Delayed/Cancelled',
-                mockData.filter((d) => d.status === 'Delayed')
+                mockData.filter((d) => ['Delayed', 'Cancelled'].includes(d.status))
               )}
             </>
-          )}
-          {!isDelivered && (
-            <Text style={{ textAlign: 'center', marginTop: 20 }}>No pending deliveries found.</Text>
           )}
         </ScrollView>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  header: {
-    width: '100%',
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 120, // Fixed height for header area
-  },
-  logo: {
-    width: 150,
-    height: 50,
-  },
-  pageTitle: {
-    color: AppColors.White,
-    fontSize: 12,
-  },
-  contentCard: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: AppColors.CardBackground,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    padding: 20,
-  },
-  deliveryTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: AppColors.TextPrimary,
-  },
-  topTabs: {
-    flexDirection: 'row',
-    backgroundColor: AppColors.GrayLight,
-    borderRadius: 20,
-    marginBottom: 20,
-  },
-  topTab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderRadius: 20,
-  },
-  topTabActive: {
-    backgroundColor: AppColors.White,
-    shadowColor: AppColors.Black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 5,
-  },
-  topTabText: {
-    fontWeight: 'bold',
-  },
-  scrollViewContent: {
-    paddingBottom: 20,
-  },
-  section: {
-    marginBottom: 10,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    paddingVertical: 10,
-    color: AppColors.TextPrimary,
-  },
-});
