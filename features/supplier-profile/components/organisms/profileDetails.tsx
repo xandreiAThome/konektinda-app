@@ -12,7 +12,7 @@ interface ProfileDetailsProps {
   location: string;
   dateJoined: string;
   description: string;
-  productList: number[];
+  productList: any[];
 }
 
 export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
@@ -66,8 +66,8 @@ export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
                 </View>
 
                 <View>
-                  <Text className="text-xs font-bold">BRAND NAME</Text>
-                  <Text className="text-xs text-gray-600">Product Name (000mL)</Text>
+                  <Text className="text-xs font-bold">{id.product_name}</Text>
+                  <Text className="text-xs text-gray-600">{id.product_description}</Text>
                   <Text className="mt-1 text-sm font-bold text-red-600">Php 100.00</Text>
                 </View>
               </View>

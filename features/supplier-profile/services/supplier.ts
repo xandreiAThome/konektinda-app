@@ -1,15 +1,15 @@
 // CRUCIAL: defining base URL
-const API_BASE_URL = 'https://konektinda-backend.xandreiat.homes';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // define expected structure of the supplier data
 export interface SupplierProfile {
-  supplierId: number;
-  name: string;
+  supplier_id: number;
+  supplier_name: string;
+  supplier_description: string;
+  products: number[]; // array of product IDs
   rating: number;
   location: string;
   dateJoined: string;
-  description: string;
-  products: number[]; // array of product IDs
 }
 
 /* fetching complete data given supplier ID
@@ -17,7 +17,7 @@ export interface SupplierProfile {
     @returns promise to the SupplierProfile data
 */
 export async function fetchSupplierProfile(supplierId: number): Promise<SupplierProfile> {
-  const url = `${API_BASE_URL}/supplier/profile/${supplierId}`;
+  const url = `${API_BASE_URL}/suppliers/${supplierId}`;
 
   try {
     const response = await fetch(url);

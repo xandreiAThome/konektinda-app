@@ -22,7 +22,7 @@ export default function SupplierProfilePage() {
   // 2. render supplier profile template
   return (
     <SupplierTemplate
-      supplierId={supplierId}
+      supplierId={Number(supplierId)}
       theme="customer"
       pageState=""
       setPageState={() => {}}

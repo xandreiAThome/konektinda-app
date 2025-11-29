@@ -33,7 +33,7 @@ export const A_SellerInfo: React.FC<SellerInfoProps> = ({
   return (
     <TouchableOpacity
       onPress={handleSellerPress}
-      className={`elevation-5 mx-auto my-4 w-[20%] flex-row items-center justify-center gap-3 rounded-lg bg-white p-[6] text-black shadow hover:bg-gray-100 hover:shadow-lg ${className} `}
+      className={`elevation-5 mx-auto my-4 flex-row items-center justify-center gap-3 rounded-lg bg-white p-4 text-black shadow hover:bg-gray-100 hover:shadow-lg ${className} `}
       {...viewProps}>
       <ExpoImage source={sellerImage} className="h-10 w-10" />
       <View>

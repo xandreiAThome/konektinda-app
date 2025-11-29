@@ -5,7 +5,7 @@ import { O_ProfileDetails } from '../organisms/profileDetails';
 import { fetchSupplierProfile, SupplierProfile } from '../../services/supplier';
 
 interface supplierTemplateProps {
-  supplierId: string; // The required ID from the URL
+  supplierId: number; // The required ID from the URL
   theme: 'supplier' | 'customer';
   pageState: string;
   setPageState: (state: string) => void;
@@ -24,10 +24,8 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
 
   useEffect(() => {
     const loadProfile = async () => {
-      const numericSupplierId = Number(supplierId);
-
       // check for invalid conversion
-      if (isNaN(numericSupplierId) || !numericSupplierId) {
+      if (isNaN(supplierId) || !supplierId) {
         setError('Invalid Supplier ID format.');
         setIsLoading(false);
         return;
@@ -35,7 +33,7 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
 
       try {
         setIsLoading(true);
-        const data = await fetchSupplierProfile(numericSupplierId);
+        const data = await fetchSupplierProfile(supplierId);
         setSupplierData(data);
         setError(null);
       } catch (err: any) {
@@ -77,11 +75,11 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
     <View className="flex-1 bg-white">
       <M_TopHeader />
       <O_ProfileDetails
-        name={supplierData.name}
+        name={supplierData.supplier_name}
         rating={supplierData.rating}
         location={supplierData.location}
         dateJoined={supplierData.dateJoined}
-        description={supplierData.description}
+        description={supplierData.supplier_description}
         productList={supplierData.products}
       />
     </View>
