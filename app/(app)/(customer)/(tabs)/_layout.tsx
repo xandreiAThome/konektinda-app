@@ -76,15 +76,6 @@ export default function TabsLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="supplier-profile"
-        options={{
-          title: 'Supplier',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="account-circle" color={color} size={size} />
-          ),
-        }}
-      />
     </Tabs>
   );
 }

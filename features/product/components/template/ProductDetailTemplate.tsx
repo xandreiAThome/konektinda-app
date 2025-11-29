@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // 1. Added useState
-import { View, FlatList, Pressable } from 'react-native';
+import { View, FlatList, Pressable, TouchableOpacity } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { cssInterop } from 'nativewind';
 import { useRouter } from 'expo-router';
@@ -46,9 +46,7 @@ const TEMP_REVIEWS: Review[] = [
 
 export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
-
   const [isCartSheetVisible, setIsCartSheetVisible] = useState(false);
-
   const { data: product, isLoading, isError } = useProductById(product_id || '');
 
   const handleBackPress = () => {
@@ -73,6 +71,9 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
 
   const primaryVariant = product.variants?.[0];
   const category = product.category;
+
+  // Important: extract product id from the product data
+  const supplierId = product.supplier_id;
 
   const sections = [
     {
@@ -135,6 +136,7 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
 
           {/* Seller Info */}
           <A_SellerInfo
+            supplierId={supplierId}
             sellerImage={require('@/assets/images/Avatar.png')}
             sellerName="SELLER NAME"
             listingDate="XX/XX/XXXX"

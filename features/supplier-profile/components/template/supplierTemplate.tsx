@@ -5,15 +5,14 @@ import { O_ProfileDetails } from '../organisms/profileDetails';
 import { fetchSupplierProfile, SupplierProfile } from '../../services/supplier';
 
 interface supplierTemplateProps {
+  supplierId: string; // The required ID from the URL
   theme: 'supplier' | 'customer';
   pageState: string;
   setPageState: (state: string) => void;
 }
 
-// Mock supplier ID for demonstration
-const SUPPLIER_ID = 123;
-
 export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
+  supplierId,
   theme,
   pageState,
   setPageState,
@@ -25,9 +24,18 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
 
   useEffect(() => {
     const loadProfile = async () => {
+      const numericSupplierId = Number(supplierId);
+
+      // check for invalid conversion
+      if (isNaN(numericSupplierId) || !numericSupplierId) {
+        setError('Invalid Supplier ID format.');
+        setIsLoading(false);
+        return;
+      }
+
       try {
         setIsLoading(true);
-        const data = await fetchSupplierProfile(SUPPLIER_ID);
+        const data = await fetchSupplierProfile(numericSupplierId);
         setSupplierData(data);
         setError(null);
       } catch (err: any) {
@@ -38,7 +46,7 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
     };
 
     loadProfile();
-  }, [SUPPLIER_ID]);
+  }, [supplierId]);
 
   // --- RENDERING STATES ---
   // 1. Loading state
