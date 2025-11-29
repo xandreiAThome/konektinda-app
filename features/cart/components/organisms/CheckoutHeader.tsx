@@ -33,10 +33,7 @@ export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
       <View className="bg-[#2C666E]">
         <View className="border-1 w-full flex-1 flex-row rounded-t-[10px] bg-[#FFFFFF] p-4">
           <A_BackButton onPress={handleGoBack} className="" />
-          <Text className="flex-1 items-center justify-center text-center text-3xl">
-            {' '}
-            Checkout{' '}
-          </Text>
+          <Text className="flex-1 items-center justify-center text-center text-3xl"> Cart </Text>
         </View>
       </View>
       <View className="">
