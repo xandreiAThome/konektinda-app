@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // 1. Added useState
-import { View, FlatList, Pressable } from 'react-native';
+import { View, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { cssInterop } from 'nativewind';
 import { useRouter } from 'expo-router';
@@ -10,6 +10,8 @@ import { Text } from '@/components/ui/text';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
+import { useSupplierProfile } from '../../../supplier-profile/hooks/useSupplierProfile';
+import { fetchSupplierProfile, SupplierProfile } from '../../../supplier-profile/services/supplier';
 import { AddToCartSheet } from '../../../cart/components/organisms/addToCartSheet';
 
 cssInterop(ExpoImage, { className: 'style' });
@@ -46,10 +48,20 @@ const TEMP_REVIEWS: Review[] = [
 
 export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
-
   const [isCartSheetVisible, setIsCartSheetVisible] = useState(false);
+  const {
+    data: product,
+    isLoading: isProductLoading,
+    isError: isProductError,
+  } = useProductById(product_id || '');
 
-  const { data: product, isLoading, isError } = useProductById(product_id || '');
+  // using supplierID as the primary key in linking between supplierProfile table and Product table
+  const supplierId = product?.supplier_id;
+  const {
+    supplier,
+    isLoading: isSupplierLoading,
+    isError: isSupplierError,
+  } = useSupplierProfile(supplierId);
 
   const handleBackPress = () => {
     router.push('/listing');
@@ -59,14 +71,15 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
     setIsCartSheetVisible(true);
   };
 
-  if (isLoading) {
-    return <ProductDetailSkeleton />;
+  // 🔑 UPDATE: Show loading or error if either product or supplier data is missing
+  if (isProductLoading || isSupplierLoading) {
+    return <ActivityIndicator size="large" className="flex-1 justify-center" />;
   }
 
-  if (isError || !product) {
+  if (isProductError || isSupplierError || !product || !supplier) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-center text-red-500">Failed to load product</Text>
+        <Text className="text-center text-red-500">Failed to load product or supplier info.</Text>
       </View>
     );
   }
@@ -135,8 +148,9 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
 
           {/* Seller Info */}
           <A_SellerInfo
+            supplierId={supplierId}
             sellerImage={require('@/assets/images/Avatar.png')}
-            sellerName="SELLER NAME"
+            sellerName={supplier.supplier_name}
             listingDate="XX/XX/XXXX"
           />
 
