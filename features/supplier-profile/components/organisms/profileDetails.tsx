@@ -11,6 +11,7 @@ interface ProfileDetailsProps {
   rating: number;
   location: string;
   dateJoined: string;
+  description: string;
   productList: number[];
 }
 
@@ -19,6 +20,7 @@ export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
   rating,
   location,
   dateJoined,
+  description,
   productList,
 }) => {
   return (
@@ -31,10 +33,7 @@ export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
 
       <M_StarRating rating={rating} />
 
-      <Text className="mb-4 mt-4 px-2 text-center text-sm text-gray-500">
-        This is a product description that highlights the perfect mix of quality, design, and
-        everyday functionality.
-      </Text>
+      <Text className="mb-4 mt-4 px-2 text-center text-sm text-gray-500">{description}</Text>
 
       <ScrollView>
         {/* Shipping and Date Joined Info Row */}
