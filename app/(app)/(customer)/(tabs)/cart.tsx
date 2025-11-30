@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { T_CheckoutTemplate } from '@/features/cart/components/template/CheckoutTemplate';
+import { T_CheckoutTemplate } from '@/features/cart/components/template/CartTemplate';
 
 export default function CartScreen() {
   return (
