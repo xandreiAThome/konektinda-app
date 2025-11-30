@@ -26,7 +26,7 @@ export const A_SellerInfo: React.FC<SellerInfoProps> = ({
 
   const handleSellerPress = () => {
     if (supplierId) {
-      router.push(`/supplier-profile/${supplierId}`);
+      router.push(`/supplier/${supplierId}`);
     }
   };
 

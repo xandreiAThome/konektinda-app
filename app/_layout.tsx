@@ -26,6 +26,9 @@ function ProtectedLayout() {
 
         {/* Customer Routes */}
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
+
+        {/* Supplier route */}
+        <Stack.Screen name="supplier/[id]" options={{ headerShown: false }} />
       </Stack>
       <PortalHost />
     </QueryProvider>

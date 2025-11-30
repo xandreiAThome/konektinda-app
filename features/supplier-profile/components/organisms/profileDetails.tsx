@@ -51,12 +51,12 @@ export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
         <Text className="mb-4 text-xl font-bold text-red-500">All Products</Text>
 
         <View className="flex-row flex-wrap justify-between pb-20 pl-5 pr-5 pt-4">
-          {productList.map((id) => (
+          {productList.map((product) => (
             <View
-              key={id}
-              className="elevation-2 mb-4 h-[100px] w-[48%] rounded-xl border border-gray-100 bg-white p-2.5 shadow-md">
+              key={product.id}
+              className="elevation-2 mb-4 h-[100px] w-full rounded-xl border border-gray-100 bg-white p-2.5 shadow-md md:w-[48%]">
               <View className="h-[100%] flex-row content-center items-center">
-                {/* Product Image Placeholder (Using ExpoImage) */}
+                {/* Product Image Placeholder (Fixed size) */}
                 <View className="mr-2.5 h-[60px] w-[60px] overflow-hidden rounded-md bg-gray-200">
                   <ExpoImage
                     source={MockProductImage}
@@ -65,9 +65,11 @@ export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
                   />
                 </View>
 
-                <View>
-                  <Text className="text-xs font-bold">{id.product_name}</Text>
-                  <Text className="text-xs text-gray-600">{id.product_description}</Text>
+                <View className="flex-1">
+                  <Text className="text-xs font-bold">{product.product_name}</Text>
+                  <Text className="text-xs text-gray-600">
+                    {product.product_description || 'Product Details'}
+                  </Text>
                   <Text className="mt-1 text-sm font-bold text-red-600">Php 100.00</Text>
                 </View>
               </View>
