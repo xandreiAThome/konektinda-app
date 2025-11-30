@@ -8,10 +8,9 @@ import { M_AddToCartButton } from '../atoms/AddToCartButton';
 import { O_ReviewsSection } from '../organisms/ReviewsSection';
 import { Text } from '@/components/ui/text';
 import { ChevronLeft } from 'lucide-react-native';
-import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
-import { useSupplierById } from '../../../supplier-profile/hooks/useSupplierProfile';
 import { AddToCartSheet } from '../../../cart/components/organisms/addToCartSheet';
+import { useSupplierById } from '@/features/suppliers/hooks/useSupplierProfile';
 
 cssInterop(ExpoImage, { className: 'style' });
 

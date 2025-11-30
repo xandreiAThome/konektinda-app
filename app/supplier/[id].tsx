@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocalSearchParams } from 'expo-router'; // to get dynamic ID
 import { View, Text } from 'react-native';
-import { SupplierTemplate } from '../../features/supplier-profile/components/template/supplierTemplate';
+import { SupplierTemplate } from '../../features/suppliers/components/template/supplierTemplate';
 
 export default function SupplierProfilePage() {
   // 1. Extract dynamic supplier ID from the url path: /supplier-profile/[id]
