@@ -33,21 +33,11 @@ export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
       <View className="bg-[#2C666E]">
         <View className="border-1 w-full flex-1 flex-row rounded-t-[10px] bg-[#FFFFFF] p-4">
           <A_BackButton onPress={handleGoBack} className="" />
-          <Text className="flex-1 items-center justify-center text-center text-3xl">
+          <Text className="font-Afacad flex-1 items-center justify-center text-center text-3xl font-bold italic">
             {' '}
-            Checkout{' '}
+            Cart{' '}
           </Text>
         </View>
-      </View>
-      <View className="">
-        <A_AddressDisplay
-          houseNoStreetName={'2313 Taft'}
-          barangay={'Barangay 728'}
-          city={'Malate'}
-          province={'Metro Manila'}
-          postalCode={1004}
-          country={'Philippines'}
-        />
       </View>
     </View>
   );

@@ -8,15 +8,19 @@ interface ProductCardProps {
   product: any;
   isChecked: boolean;
   oncheckedChange: (newValue: boolean) => void;
+  onQuantityChange?: (newQuantity: number) => void;
+  showQuantityControls?: boolean;
 }
 
 export const M_ProductCard: React.FC<ProductCardProps> = ({
   product,
   isChecked,
   oncheckedChange,
+  onQuantityChange,
+  showQuantityControls = false,
 }) => {
   return (
-    <View className="m-1 my-2 flex-row items-center gap-6 rounded-lg bg-white p-4 shadow">
+    <View className="flex-row items-center gap-6 rounded-lg bg-white p-4 shadow">
       <Checkbox value={isChecked} onValueChange={oncheckedChange} />
       <A_ProductInfo
         productImage={product.productImage}
@@ -24,6 +28,8 @@ export const M_ProductCard: React.FC<ProductCardProps> = ({
         productVariant={product.productVariant}
         quantity={product.quantity}
         productPrice={product.productPrice}
+        onQuantityChange={onQuantityChange}
+        showControls={showQuantityControls}
         className="flex-1"
       />
     </View>

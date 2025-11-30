@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { T_CheckoutTemplate } from '@/features/cart/components/template/CheckoutTemplate';
 
