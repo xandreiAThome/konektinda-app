@@ -1,12 +1,11 @@
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+export interface Supplier {
+  supplier_id: number;
+  supplier_name: string;
+  supplier_description?: string | null;
+  products: any[];
 
-export interface Post {
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
+  //need others to define in API website as it was not yet present
+  rating?: number;
+  location?: string;
+  dateJoined?: string;
 }

@@ -10,8 +10,7 @@ import { Text } from '@/components/ui/text';
 import { ChevronLeft } from 'lucide-react-native';
 import { ProductDetailSkeleton } from '../molecules/productDetailSkeleton';
 import { useProductById } from '../../hooks';
-import { useSupplierProfile } from '../../../supplier-profile/hooks/useSupplierProfile';
-import { fetchSupplierProfile, SupplierProfile } from '../../../supplier-profile/services/supplier';
+import { useSupplierById } from '../../../supplier-profile/hooks/useSupplierProfile';
 import { AddToCartSheet } from '../../../cart/components/organisms/addToCartSheet';
 
 cssInterop(ExpoImage, { className: 'style' });
@@ -49,19 +48,15 @@ const TEMP_REVIEWS: Review[] = [
 export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id }) => {
   const router = useRouter();
   const [isCartSheetVisible, setIsCartSheetVisible] = useState(false);
-  const {
-    data: product,
-    isLoading: isProductLoading,
-    isError: isProductError,
-  } = useProductById(product_id || '');
+  const { data: product, isLoading, isError } = useProductById(product_id || '');
 
   // using supplierID as the primary key in linking between supplierProfile table and Product table
   const supplierId = product?.supplier_id;
   const {
-    supplier,
+    data: supplier,
     isLoading: isSupplierLoading,
     isError: isSupplierError,
-  } = useSupplierProfile(supplierId);
+  } = useSupplierById(supplierId);
 
   const handleBackPress = () => {
     router.push('/listing');
@@ -72,14 +67,14 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
   };
 
   // 🔑 UPDATE: Show loading or error if either product or supplier data is missing
-  if (isProductLoading || isSupplierLoading) {
+  if (isLoading || isSupplierLoading) {
     return <ActivityIndicator size="large" className="flex-1 justify-center" />;
   }
 
-  if (isProductError || isSupplierError || !product || !supplier) {
+  if (isError || isSupplierError || !product || !supplier) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-center text-red-500">Failed to load product or supplier info.</Text>
+        <Text className="text-center text-red-500">Failed to load product info.</Text>
       </View>
     );
   }
@@ -150,7 +145,7 @@ export const ProductDetailTemplate: React.FC<ProductDetailProps> = ({ product_id
           <A_SellerInfo
             supplierId={supplierId}
             sellerImage={require('@/assets/images/Avatar.png')}
-            sellerName={supplier.supplier_name}
+            sellerName={supplier.supplier_name || 'Unknown supplier'} // This is the reason we fetch supplier data
             listingDate="XX/XX/XXXX"
           />
 

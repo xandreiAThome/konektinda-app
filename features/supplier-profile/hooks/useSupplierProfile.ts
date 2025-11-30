@@ -1,43 +1,25 @@
-import { useState, useEffect } from 'react';
-import { fetchSupplierProfile, SupplierProfile } from '../services/supplier';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSupplierById, fetchAllSuppliers } from '../services/supplier';
 
-// Define a simple return type for the hook
-interface SupplierProfileHook {
-  supplier: SupplierProfile | null;
-  isLoading: boolean;
-  isError: boolean;
+const QUERY_KEYS = {
+  suppliers: () => ['suppliers'],
+  supplier: (id: number) => ['supplier', id],
+};
+
+export function useAllSuppliers() {
+  return useQuery({
+    queryKey: QUERY_KEYS.suppliers(),
+    queryFn: fetchAllSuppliers,
+    staleTime: 0, // Temporary: force refetch every time to see loading
+    gcTime: 0, // Temporary: don't cache
+  });
 }
 
-/**
- * Fetches and manages the state for a single Supplier's Profile.
- * @param supplierId The ID of the supplier to fetch.
- */
-export const useSupplierProfile = (supplierId: number | undefined): SupplierProfileHook => {
-  const [supplier, setSupplier] = useState<SupplierProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    // Only proceed if the ID is valid and not loading
-    if (!supplierId) return;
-
-    const loadSupplier = async () => {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        const data = await fetchSupplierProfile(supplierId);
-        setSupplier(data);
-      } catch (error) {
-        console.error('Failed to load supplier profile:', error);
-        setIsError(true);
-        setSupplier(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadSupplier();
-  }, [supplierId]); // Rerun effect when supplierId changes
-
-  return { supplier, isLoading, isError };
-};
+export function useSupplierById(id: number) {
+  return useQuery({
+    queryKey: QUERY_KEYS.supplier(id),
+    queryFn: () => fetchSupplierById(id),
+    staleTime: 0, // Temporary: force refetch every time to see loading
+    gcTime: 0, // Temporary: don't cache
+  });
+}

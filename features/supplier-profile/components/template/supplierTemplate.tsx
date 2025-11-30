@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { M_TopHeader } from '../molecules/topHeader';
 import { O_ProfileDetails } from '../organisms/profileDetails';
-import { fetchSupplierProfile, SupplierProfile } from '../../services/supplier';
+import { useSupplierById } from '../../hooks/useSupplierProfile';
 
 interface supplierTemplateProps {
   supplierId: number; // The required ID from the URL
@@ -18,10 +18,13 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
   setPageState,
 }) => {
   // 🔑 State to manage data, loading, and error states
+  /*
   const [supplierData, setSupplierData] = useState<SupplierProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  */
 
+  /*
   useEffect(() => {
     const loadProfile = async () => {
       // check for invalid conversion
@@ -44,7 +47,8 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
     };
 
     loadProfile();
-  }, [supplierId]);
+  }, [supplierId]); */
+  const { data: supplier, isLoading, isError } = useSupplierById(supplierId || 0);
 
   // --- RENDERING STATES ---
   // 1. Loading state
@@ -58,14 +62,14 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
   }
 
   // 2. Error state
-  if (error || !supplierData) {
+  if (isError || !supplier) {
     return (
       <View className="flex-1 items-center justify-center p-10">
         <Text className="mb-4 text-xl font-bold text-red-600">Error Loading Profile</Text>
         <Text className="text-center text-gray-700">
           Could not connect to the API or fetch data.
         </Text>
-        <Text className="mt-2 text-sm text-gray-500">Details: {error}</Text>
+        <Text className="mt-2 text-sm text-gray-500">Details: {isError}</Text>
       </View>
     );
   }
@@ -75,12 +79,12 @@ export const SupplierTemplate: React.FC<supplierTemplateProps> = ({
     <View className="flex-1 bg-white">
       <M_TopHeader />
       <O_ProfileDetails
-        name={supplierData.supplier_name}
-        rating={supplierData.rating}
-        location={supplierData.location}
-        dateJoined={supplierData.dateJoined}
-        description={supplierData.supplier_description}
-        productList={supplierData.products}
+        name={supplier.supplier_name}
+        rating={supplier.rating}
+        location={supplier.location}
+        dateJoined={supplier.dateJoined}
+        description={supplier.supplier_description}
+        productList={supplier.products}
       />
     </View>
   );

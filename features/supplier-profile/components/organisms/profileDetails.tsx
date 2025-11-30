@@ -53,7 +53,7 @@ export const O_ProfileDetails: React.FC<ProfileDetailsProps> = ({
         <View className="flex-row flex-wrap justify-between pb-20 pl-5 pr-5 pt-4">
           {productList.map((product) => (
             <View
-              key={product.id}
+              key={product.product_id}
               className="elevation-2 mb-4 h-[100px] w-full rounded-xl border border-gray-100 bg-white p-2.5 shadow-md md:w-[48%]">
               <View className="h-[100%] flex-row content-center items-center">
                 {/* Product Image Placeholder (Fixed size) */}
