@@ -24,7 +24,7 @@ export const CheckoutTemplate = () => {
     }
     return [];
   }, [params.selectedIds]);
-  const deliveryFee = 50.0;
+  const deliveryFee = 0;
   const orderTotal = useMemo(() => {
     if (!cartItems) return 0;
 
