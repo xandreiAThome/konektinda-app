@@ -1,12 +1,27 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Platform, FlatList, Image } from 'react-native';
 import { createElement } from 'react';
 import { Truck } from 'lucide-react-native';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
-export const OrderDetails = () => {
+interface OrderDetailsProps {
+  cartItems?: any[];
+  selectedIds?: string[];
+}
+
+export const OrderDetails: React.FC<OrderDetailsProps> = ({ cartItems = [], selectedIds = [] }) => {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+
+  // Filter selected items
+  const selectedItems = useMemo(() => {
+    if (!cartItems || cartItems.length === 0) return [];
+
+    return cartItems.filter((item: any) => {
+      const itemId = String(item.cart_item_id || item.id);
+      return selectedIds.length > 0 ? selectedIds.includes(itemId) : false;
+    });
+  }, [cartItems, selectedIds]);
 
   // Helper to get "YYYY-MM-DD" for the Web 'min' attribute
   const getTodayString = () => {
@@ -34,9 +49,48 @@ export const OrderDetails = () => {
     });
   };
 
+  const renderCartItem = ({ item }: { item: any }) => {
+    const productName =
+      item.product?.product_name || item.variant?.product?.product_name || 'Unknown';
+    const variantName = item.variant?.variant_name || 'Standard';
+    const price = item.unit_price || item.price || item.variant?.price || 0;
+    const quantity = item.quantity || 1;
+
+    return (
+      <View className="flex-row items-center gap-3 border-b border-gray-100 p-3">
+        <Image
+          source={require('@/assets/images/temp_image.png')}
+          style={{ width: 50, height: 50 }}
+          resizeMode="contain"
+        />
+        <View className="flex-1">
+          <Text className="font-semibold text-[#1e1e1e]">{productName}</Text>
+          <Text className="text-xs text-gray-500">{variantName}</Text>
+          <Text className="text-xs font-semibold text-[#3C7F64]">x{quantity} pc</Text>
+        </View>
+        <View className="items-end">
+          <Text className="font-bold text-[#EB5555]">₱{(price * quantity).toFixed(2)}</Text>
+          <Text className="text-xs text-gray-500">₱{price.toFixed(2)} each</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View className="mt-4 bg-white p-4">
       <Text className="mb-4 font-bold text-[#1e1e1e]">Order Details</Text>
+
+      {/* Cart Items Section */}
+      {selectedItems.length > 0 && (
+        <View className="mb-4 rounded-lg border border-gray-200 bg-gray-50">
+          <FlatList
+            data={selectedItems}
+            renderItem={renderCartItem}
+            keyExtractor={(item) => String(item.cart_item_id || item.id)}
+            scrollEnabled={false}
+          />
+        </View>
+      )}
 
       {/* Delivery Date Row */}
       <View className="mb-6 flex-row items-start">

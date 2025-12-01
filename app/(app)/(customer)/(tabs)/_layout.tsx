@@ -2,6 +2,7 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'; //for implementing shipping icon truck
+import { ShoppingCart } from 'lucide-react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { cssInterop } from 'nativewind';
@@ -65,6 +66,13 @@ export default function TabsLayout() {
         name="product"
         options={{
           href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: 'Cart',
+          tabBarIcon: ({ color, size }) => <ShoppingCart color={color} size={size} />,
         }}
       />
       <Tabs.Screen
