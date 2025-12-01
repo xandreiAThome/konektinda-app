@@ -23,6 +23,7 @@ interface SupplierCardProps {
   oncheckedChange: (newValue: boolean) => void;
   onItemToggle?: (id: string, value: boolean) => void;
   onItemQuantityChange?: (id: string, newQty: number) => void;
+  onItemDelete?: (id: string) => void;
 }
 
 export const O_SupplierCard: React.FC<SupplierCardProps> = ({
@@ -32,6 +33,7 @@ export const O_SupplierCard: React.FC<SupplierCardProps> = ({
   oncheckedChange,
   onItemToggle,
   onItemQuantityChange,
+  onItemDelete,
 }) => {
   const [editMode, setEditMode] = useState(false);
   const allSelected = products.length > 0 && products.every((p) => p.isSelected);
@@ -51,6 +53,7 @@ export const O_SupplierCard: React.FC<SupplierCardProps> = ({
           oncheckedChange={() => onItemToggle?.(item.id, !item.isSelected)}
           onQuantityChange={(newQty) => onItemQuantityChange?.(item.id, newQty)}
           showQuantityControls={editMode}
+          onDelete={() => onItemDelete?.(item.id)}
         />
       </View>
     );

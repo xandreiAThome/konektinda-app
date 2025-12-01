@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, FlatList, ScrollView, Alert } from 'react-native';
 import { O_CheckoutHeader } from '../organisms/CheckoutHeader';
 import { M_CheckoutFooter } from '../molecules/checkoutFooter';
-import { useCartAll, useUpdateCartItem } from '../../hooks';
+import { DeleteConfirmDialog } from '../molecules/DeleteConfirmDialog';
+import { useCartAll, useUpdateCartItem, useDeleteCartItem } from '../../hooks';
 import { useAuthStore } from '../../../auth/hooks/useAuthStore';
 import { O_SupplierCard } from '../organisms/supplierCard';
 import { useRouter } from 'expo-router';
@@ -33,6 +34,11 @@ export const T_CheckoutTemplate = () => {
 
   const { data: cart } = useCartAll();
   const updateCartItemMutation = useUpdateCartItem();
+  const deleteCartItemMutation = useDeleteCartItem();
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedProductForDelete, setSelectedProductForDelete] =
+    useState<SelectableProduct | null>(null);
 
   // Transform cart data into SelectableProduct format
   const serverProducts = React.useMemo(() => {
@@ -116,6 +122,33 @@ export const T_CheckoutTemplate = () => {
     });
   };
 
+  const handleDeleteItem = (id: string) => {
+    const product = serverProducts.find((p: SelectableProduct) => p.id === id);
+
+    if (!product?.productVariantId) {
+      console.warn('Missing productVariantId for item', id);
+      return;
+    }
+
+    setSelectedProductForDelete(product);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!selectedProductForDelete?.productVariantId) return;
+
+    deleteCartItemMutation.mutate(Number(selectedProductForDelete.productVariantId), {
+      onError: (err) => {
+        console.error('Failed to delete cart item', err);
+        Alert.alert('Error', 'Failed to remove item from cart');
+      },
+      onSuccess: () => {
+        setDeleteDialogOpen(false);
+        setSelectedProductForDelete(null);
+      },
+    });
+  };
+
   const supplierGroups: SupplierGroup[] = React.useMemo(
     () =>
       Object.values(
@@ -161,6 +194,9 @@ export const T_CheckoutTemplate = () => {
       onItemQuantityChange={(id: string, newQty: number) => {
         handleQuantityChange(id, newQty);
       }}
+      onItemDelete={(id: string) => {
+        handleDeleteItem(id);
+      }}
     />
   );
   return (
@@ -192,6 +228,17 @@ export const T_CheckoutTemplate = () => {
           onPress={handleProceedToCheckout}
         />
       </View>
+
+      <DeleteConfirmDialog
+        isOpen={deleteDialogOpen}
+        productName={selectedProductForDelete?.productName || ''}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setDeleteDialogOpen(false);
+          setSelectedProductForDelete(null);
+        }}
+        isLoading={deleteCartItemMutation.isPending}
+      />
     </View>
   );
 };
