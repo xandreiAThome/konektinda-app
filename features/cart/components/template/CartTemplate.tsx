@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, FlatList, ScrollView, Alert } from 'react-native';
 import { O_CheckoutHeader } from '../organisms/CheckoutHeader';
-import { M_ProductCard } from '../molecules/productCard';
 import { M_CheckoutFooter } from '../molecules/checkoutFooter';
 import { useCartAll, useUpdateCartItem } from '../../hooks';
-import { CartItem } from '../../types';
 import { useAuthStore } from '../../../auth/hooks/useAuthStore';
 import { O_SupplierCard } from '../organisms/supplierCard';
+import { useRouter } from 'expo-router';
 
 type SelectableProduct = {
   id: string;
@@ -32,34 +31,13 @@ export const T_CheckoutTemplate = () => {
   const user = useAuthStore((state) => state.user);
   console.log('Current User:', user?.email);
 
-  const { data: cart, isLoading, error } = useCartAll();
-
-  const handleProceedToCheckout = () => {
-    // Filter to find only selected products
-    const selectedItems = products.filter((p) => p.isSelected);
-
-    if (selectedItems.length === 0) {
-      Alert.alert('No items selected', 'Please select at least one item to checkout.');
-      return;
-    }
-
-    // Get their IDs
-    const selectedIds = selectedItems.map((p) => p.id);
-
-    // Push to checkout with IDs
-    router.push({
-      pathname: '/checkout',
-      params: { selectedIds: JSON.stringify(selectedIds) },
-    });
-  };
-
-  console.log('Cart Data:', cart);
-  const [products, setProducts] = useState<SelectableProduct[]>([]);
+  const { data: cart } = useCartAll();
   const updateCartItemMutation = useUpdateCartItem();
 
-  useEffect(() => {
-    if (cart) {
-      const initialProducts = cart.map((item: any) => ({
+  // Transform cart data into SelectableProduct format
+  const serverProducts = React.useMemo(() => {
+    return (
+      cart?.map((item: any) => ({
         id: String(item.cart_item_id ?? item.id),
         supplierId: String(
           item.variant?.product?.supplier?.supplier_id ??
@@ -74,78 +52,89 @@ export const T_CheckoutTemplate = () => {
         productPrice: Number(item.price || item.unit_price),
         supplierName: item.variant?.product?.supplier?.supplier_name || 'Unknown Supplier',
         isSelected: true,
-      }));
-
-      setProducts((prev) => {
-        if (!prev || prev.length === 0) return initialProducts;
-
-        const serverMap = new Map(initialProducts.map((p) => [p.id, p]));
-
-        const merged: typeof initialProducts = [];
-
-        for (const old of prev) {
-          const serverItem = serverMap.get(old.id);
-          if (serverItem) {
-            merged.push({
-              ...serverItem,
-              quantity: old.quantity ?? serverItem.quantity,
-              isSelected: old.isSelected ?? serverItem.isSelected,
-            });
-            serverMap.delete(old.id);
-          }
-        }
-
-        for (const remaining of serverMap.values()) {
-          merged.push(remaining);
-        }
-
-        return merged;
-      });
-    }
+      })) ?? []
+    );
   }, [cart]);
 
-  const handleQuantityChange = (id: string, newQty: number) => {
-    setProducts((prev) => {
-      const item = prev.find((p) => p.id === id);
-      const variantId = item?.productVariantId;
+  // Track local changes (selection and quantity) separately
+  const [localChanges, setLocalChanges] = useState<
+    Map<string, { quantity?: number; isSelected?: boolean }>
+  >(new Map());
 
-      // Persist to backend if we have variant id
-      if (variantId) {
-        updateCartItemMutation.mutate(
-          { productVariantId: Number(variantId), quantity: Number(newQty) },
-          {
-            onError: (err) => {
-              console.error('Failed to update cart item', err);
-            },
-          }
-        );
-      } else {
-        console.warn('Missing productVariantId for item', id);
-      }
-
-      return prev.map((p) => (p.id === id ? { ...p, quantity: newQty } : p));
-    });
-  };
-  const supplierGroups: SupplierGroup[] = Object.values(
-    products.reduce<Record<string, SupplierGroup>>((acc, p) => {
-      const key = p.supplierId || 'unknown';
-      if (!acc[key]) acc[key] = { supplierId: key, supplierName: p.supplierName, products: [] };
-      acc[key].products.push(p);
-      return acc;
-    }, {})
+  // Merge server data with local changes for display
+  const products = React.useMemo(
+    () =>
+      serverProducts.map((product: SelectableProduct) => ({
+        ...product,
+        quantity: localChanges.get(product.id)?.quantity ?? product.quantity,
+        isSelected: localChanges.get(product.id)?.isSelected ?? product.isSelected,
+      })),
+    [serverProducts, localChanges]
   );
 
-  const toggleSelection = (id: string) => {
-    setProducts((currentProducts) =>
-      currentProducts.map((product) =>
-        product.id === id ? { ...product, isSelected: !product.isSelected } : product
-      )
-    );
+  const handleProceedToCheckout = () => {
+    // Filter to find only selected products
+    const selectedItems = products.filter((p: SelectableProduct) => p.isSelected);
+
+    if (selectedItems.length === 0) {
+      Alert.alert('No items selected', 'Please select at least one item to checkout.');
+      return;
+    }
+
+    // Get their IDs
+    const selectedIds = selectedItems.map((p: SelectableProduct) => p.id);
+
+    // Push to checkout with IDs
+    router.push({
+      pathname: '/checkout',
+      params: { selectedIds: JSON.stringify(selectedIds) },
+    });
   };
 
-  const checkedProducts = products.filter((p) => p.isSelected);
-  const totalChecked = checkedProducts.length;
-  const orderTotal = checkedProducts.reduce((total, product) => {
+  const handleQuantityChange = (id: string, newQty: number) => {
+    const product = serverProducts.find((p: SelectableProduct) => p.id === id);
+
+    // Persist to backend if we have variant id
+    if (product?.productVariantId) {
+      updateCartItemMutation.mutate(
+        { productVariantId: Number(product.productVariantId), quantity: Number(newQty) },
+        {
+          onError: (err) => {
+            console.error('Failed to update cart item', err);
+          },
+        }
+      );
+    } else {
+      console.warn('Missing productVariantId for item', id);
+    }
+
+    // Update local state
+    setLocalChanges((prev) => {
+      const newMap = new Map(prev);
+      newMap.set(id, { ...newMap.get(id), quantity: newQty });
+      return newMap;
+    });
+  };
+
+  const supplierGroups: SupplierGroup[] = React.useMemo(
+    () =>
+      Object.values(
+        products.reduce(
+          (acc: Record<string, SupplierGroup>, p: SelectableProduct) => {
+            const key = p.supplierId || 'unknown';
+            if (!acc[key])
+              acc[key] = { supplierId: key, supplierName: p.supplierName, products: [] };
+            acc[key].products.push(p);
+            return acc;
+          },
+          {} as Record<string, SupplierGroup>
+        )
+      ),
+    [products]
+  );
+
+  const checkedProducts = products.filter((p: SelectableProduct) => p.isSelected);
+  const orderTotal = checkedProducts.reduce((total: number, product: SelectableProduct) => {
     return total + product.quantity * product.productPrice;
   }, 0);
   const renderSupplier = ({ item }: { item: SupplierGroup }) => (
@@ -154,16 +143,20 @@ export const T_CheckoutTemplate = () => {
       supplierName={item.supplierName}
       isChecked={item.products.every((p) => p.isSelected)}
       oncheckedChange={(value: boolean) => {
-        setProducts((current) =>
-          current.map((prod) =>
-            prod.supplierId === item.supplierId ? { ...prod, isSelected: value } : prod
-          )
-        );
+        setLocalChanges((prev) => {
+          const newMap = new Map(prev);
+          for (const product of item.products) {
+            newMap.set(product.id, { ...newMap.get(product.id), isSelected: value });
+          }
+          return newMap;
+        });
       }}
       onItemToggle={(id: string, value: boolean) => {
-        setProducts((current) =>
-          current.map((p) => (p.id === id ? { ...p, isSelected: value } : p))
-        );
+        setLocalChanges((prev) => {
+          const newMap = new Map(prev);
+          newMap.set(id, { ...newMap.get(id), isSelected: value });
+          return newMap;
+        });
       }}
       onItemQuantityChange={(id: string, newQty: number) => {
         handleQuantityChange(id, newQty);
@@ -193,7 +186,11 @@ export const T_CheckoutTemplate = () => {
       </View>
 
       <View className="items-bottom">
-        <M_CheckoutFooter orderTotal={orderTotal} deliveryfee={0} />
+        <M_CheckoutFooter
+          orderTotal={orderTotal}
+          deliveryfee={0}
+          onPress={handleProceedToCheckout}
+        />
       </View>
     </View>
   );

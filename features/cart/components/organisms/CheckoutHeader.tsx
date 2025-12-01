@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { A_BackButton } from '../atoms/BackButton';
 import { A_AddressDisplay } from '../atoms/AddressDisplay';
@@ -11,6 +13,7 @@ interface CheckoutHeaderProps {
   province: string;
   postalCode: number;
   country: string;
+  className?: string;
 }
 
 export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
@@ -20,8 +23,7 @@ export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
   province,
   postalCode,
   country,
-  className = '',
-  ...viewProps
+  className,
 }) => {
   const navigation = useNavigation();
   const handleGoBack = () => {
