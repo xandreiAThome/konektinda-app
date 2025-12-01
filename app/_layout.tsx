@@ -8,6 +8,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useProtectedRoute } from '@/features/auth/hooks/useProtectRoutes';
 import LoadingScreen from '@/components/molecule/loadingScreen';
 import { auth } from '@/config/firebase';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 function ProtectedLayout() {
   useProtectedRoute();
@@ -15,16 +19,11 @@ function ProtectedLayout() {
   return (
     <QueryProvider>
       <Stack>
-        {/* Login Page (index.tsx) */}
         <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-
-        {/* Signup Page (signup.tsx) */}
         <Stack.Screen
           name="(auth)/signup"
           options={{ title: 'Create Account', headerShown: false }}
         />
-
-        {/* Customer Routes */}
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
 
         {/* Supplier route */}
@@ -36,26 +35,34 @@ function ProtectedLayout() {
 }
 
 export default function RootLayout() {
-  // Get state and setters from the store
   const { initializing, setInitializing, setUser } = useAuthStore();
 
-  // Set up the auth listener
+  const [fontsLoaded] = useFonts({
+    'Afacad-Regular': require('../assets/fonts/Afacad/static/Afacad-Regular.ttf'),
+    'Afacad-Bold': require('../assets/fonts/Afacad/static/Afacad-Bold.ttf'),
+  });
+
   useEffect(() => {
-    // Firebase will check its persisted session automatically
-    // This listener will fire with the persisted user if one exists
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setInitializing(false);
     });
-
     return () => unsubscribe();
   }, [setUser, setInitializing]);
 
-  // Render loading while initializing
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   if (initializing) {
     return <LoadingScreen />;
   }
 
-  // Once initialized, render the ProtectedLayout
   return <ProtectedLayout />;
 }

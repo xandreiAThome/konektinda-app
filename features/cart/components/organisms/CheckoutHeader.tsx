@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { A_BackButton } from '../atoms/BackButton';
 import { A_AddressDisplay } from '../atoms/AddressDisplay';
@@ -11,6 +13,7 @@ interface CheckoutHeaderProps {
   province: string;
   postalCode: number;
   country: string;
+  className?: string;
 }
 
 export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
@@ -20,8 +23,7 @@ export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
   province,
   postalCode,
   country,
-  className = '',
-  ...viewProps
+  className,
 }) => {
   const navigation = useNavigation();
   const handleGoBack = () => {
@@ -33,18 +35,11 @@ export const O_CheckoutHeader: React.FC<CheckoutHeaderProps> = ({
       <View className="bg-[#2C666E]">
         <View className="border-1 w-full flex-1 flex-row rounded-t-[10px] bg-[#FFFFFF] p-4">
           <A_BackButton onPress={handleGoBack} className="" />
-          <Text className="flex-1 items-center justify-center text-center text-3xl"> Cart </Text>
+          <Text className="font-Afacad flex-1 items-center justify-center text-center text-3xl font-bold italic">
+            {' '}
+            Cart{' '}
+          </Text>
         </View>
-      </View>
-      <View className="">
-        <A_AddressDisplay
-          houseNoStreetName={'2313 Taft'}
-          barangay={'Barangay 728'}
-          city={'Malate'}
-          province={'Metro Manila'}
-          postalCode={1004}
-          country={'Philippines'}
-        />
       </View>
     </View>
   );

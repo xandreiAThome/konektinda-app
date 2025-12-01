@@ -11,6 +11,13 @@ export interface ProductImage {
 
 export interface Product {
   product_name: string;
+  supplier: Supplier;
+}
+
+export interface Supplier {
+  supplier_id: number;
+  supplier_name: string;
+  suplier_description: string;
 }
 
 export interface CartItem {

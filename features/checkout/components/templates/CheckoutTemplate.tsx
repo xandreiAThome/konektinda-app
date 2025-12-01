@@ -118,7 +118,7 @@ export const CheckoutTemplate = () => {
             />
           </View>
 
-          <OrderDetails />
+          <OrderDetails cartItems={cartItems} selectedIds={selectedIds} />
           <View className="h-40" />
         </ScrollView>
 

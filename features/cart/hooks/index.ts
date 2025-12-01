@@ -1,7 +1,7 @@
 import { fetchCartProducts } from '../services/index';
 import { useAuthStore } from '../../auth/hooks/useAuthStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { addItemToCart, fetchCartItems, updateCartItem } from '../services';
+import { addItemToCart, fetchCartItems, updateCartItem, deleteCartItem } from '../services';
 
 export const QUERY_KEYS = {
   cart: () => ['cart'],
@@ -50,6 +50,16 @@ export function useAddItemToCart() {
     },
     onError: (error) => {
       console.error('Error adding item to cart:', error);
+    },
+  });
+}
+
+export function useDeleteCartItem() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteCartItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
     },
   });
 }

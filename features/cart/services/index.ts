@@ -83,3 +83,23 @@ export async function updateCartItem(item: CartItemInput) {
 
   if (!res.ok) throw new Error('Failed to update cart item');
 }
+
+export async function deleteCartItem(productVariantId: number) {
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/cart/items/${productVariantId}`;
+
+  const token = await auth.currentUser?.getIdToken();
+  if (!token) {
+    throw new Error('User is not authenticated');
+  }
+
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    credentials: 'include',
+  });
+
+  if (!res.ok) throw new Error('Failed to delete cart item');
+}
