@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ScrollView } from 'react-native';
+import { View, Text, FlatList, ScrollView, Alert } from 'react-native';
 import { O_CheckoutHeader } from '../organisms/CheckoutHeader';
 import { M_ProductCard } from '../molecules/productCard';
 import { M_CheckoutFooter } from '../molecules/checkoutFooter';
@@ -28,10 +28,30 @@ type SupplierGroup = {
 };
 
 export const T_CheckoutTemplate = () => {
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
   console.log('Current User:', user?.email);
 
   const { data: cart, isLoading, error } = useCartAll();
+
+  const handleProceedToCheckout = () => {
+    // Filter to find only selected products
+    const selectedItems = products.filter((p) => p.isSelected);
+
+    if (selectedItems.length === 0) {
+      Alert.alert('No items selected', 'Please select at least one item to checkout.');
+      return;
+    }
+
+    // Get their IDs
+    const selectedIds = selectedItems.map((p) => p.id);
+
+    // Push to checkout with IDs
+    router.push({
+      pathname: '/checkout',
+      params: { selectedIds: JSON.stringify(selectedIds) },
+    });
+  };
 
   console.log('Cart Data:', cart);
   const [products, setProducts] = useState<SelectableProduct[]>([]);

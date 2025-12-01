@@ -1,5 +1,5 @@
 //Templates
-export { T_CheckoutTemplate } from './template/CheckoutTemplate';
+export { T_CheckoutTemplate } from './template/CartTemplate';
 
 //Molecules
 export { M_ProductCard } from './molecules/productCard';

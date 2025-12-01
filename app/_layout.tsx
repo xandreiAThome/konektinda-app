@@ -25,6 +25,9 @@ function ProtectedLayout() {
           options={{ title: 'Create Account', headerShown: false }}
         />
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
+
+        {/* Supplier route */}
+        <Stack.Screen name="supplier/[id]" options={{ headerShown: false }} />
       </Stack>
       <PortalHost />
     </QueryProvider>
