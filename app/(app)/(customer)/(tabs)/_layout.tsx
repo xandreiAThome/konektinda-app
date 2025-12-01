@@ -69,6 +69,12 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="checkout"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="cart"
         options={{
           title: 'Cart',

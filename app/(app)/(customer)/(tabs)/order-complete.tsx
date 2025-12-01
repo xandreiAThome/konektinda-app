@@ -9,12 +9,12 @@ export default function OrderCompletePage() {
 
   // Navigation handlers
   const handleNavigateHome = () => {
-    // Navigate back to the product listing (adjust path if needed, e.g., '/(tabs)/home')
-    router.push('/');
+    // Navigate back to the home tab
+    router.replace('/(app)/(customer)/(tabs)');
   };
   const handleNavigateListing = () => {
-    // Navigate back to the product listing (adjust path if needed, e.g., '/(tabs)/home')
-    router.push('/listing');
+    // Navigate back to the product listing
+    router.replace('/(app)/(customer)/(tabs)/listing');
   };
 
   return (
