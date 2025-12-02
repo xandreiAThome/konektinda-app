@@ -7,7 +7,7 @@ export default function CheckoutLayout() {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="index" />
+      <Stack.Screen name="checkout" />
       <Stack.Screen name="order-complete" />
     </Stack>
   );

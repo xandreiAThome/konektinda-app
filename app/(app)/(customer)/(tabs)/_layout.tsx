@@ -69,7 +69,13 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="checkout"
+        name="(checkout)"
+        options={{
+          href: null,
+        }}
+      />{' '}
+      <Tabs.Screen
+        name="order-complete"
         options={{
           href: null,
         }}

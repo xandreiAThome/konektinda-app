@@ -49,7 +49,9 @@ export const CheckoutTemplate = () => {
 
   const handlePlaceOrder = () => {
     // Navigate to the Order Complete page
-    router.push('checkout/order-complete');
+    router.push({
+      pathname: '/order-complete',
+    });
   };
 
   // Create state to track the selection
