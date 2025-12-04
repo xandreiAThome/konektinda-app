@@ -72,6 +72,7 @@ export default function TabsLayout() {
         name="(checkout)"
         options={{
           href: null,
+          headerShown: false,
         }}
       />{' '}
       <Tabs.Screen

@@ -18,7 +18,7 @@ export const CheckoutTemplate = () => {
       try {
         // We cast to string because params can be string | string[]
         return JSON.parse(params.selectedIds as string);
-      } catch (e) {
+      } catch {
         return [];
       }
     }
@@ -26,20 +26,19 @@ export const CheckoutTemplate = () => {
   }, [params.selectedIds]);
   const deliveryFee = 0;
   const orderTotal = useMemo(() => {
-    if (!cartItems) return 0;
+    if (!cartItems || cartItems.length === 0) return 0;
 
     return cartItems.reduce((sum: number, item: any) => {
-      // Logic: Only add to sum if the item ID is in our list
-      // Note: Make sure 'item.cart_item_id' matches the ID field used in CartTemplate
-      const itemId = item.cart_item_id || item.id;
+      // Get item ID as string for comparison
+      const itemId = String(item.cart_item_id || item.id);
 
-      // If selectedIds is empty (e.g. direct navigation), you might want to show 0 or All
-      // Here we assume if list is provided, we filter.
+      // Check if this item is selected
       const isSelected = selectedIds.length > 0 ? selectedIds.includes(itemId) : true;
 
       if (isSelected) {
-        const price = item.unit_price || item.variant?.price || 0;
-        return sum + price * item.quantity;
+        const price = Number(item.unit_price || item.variant?.price || item.price || 0);
+        const quantity = Number(item.quantity || 1);
+        return sum + price * quantity;
       }
       return sum;
     }, 0);
